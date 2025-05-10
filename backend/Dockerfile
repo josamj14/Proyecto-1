@@ -9,9 +9,10 @@ COPY package*.json ./
 
 # Instalar las dependencias del proyecto
 RUN npm install
-RUN npm install jsonwebtoken
 RUN npm install express-jwt
 RUN npm install ---save-dev nodemon
+RUN npm install jest
+RUN npm install mongoose
 # Copiar el resto de los archivos del proyecto
 COPY . .
 

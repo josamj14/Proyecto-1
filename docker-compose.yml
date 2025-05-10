@@ -1,7 +1,10 @@
 
 services:
   db:
-    container_name: postgres_db
+    container_name: postgres
+    build: 
+        context: ./postgres2 
+        dockerfile: Dockerfile 
     image: postgres_db
     restart: always
     environment:
@@ -10,12 +13,22 @@ services:
        POSTGRES_DB: RestaurantDB
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "RestaurantDB"]
+      interval: 10s
+      retries: 5
+      start_period: 60s
+      timeout: 5s
 
   backend:
-    container_name: app
+    container_name: backend
+    build: 
+        context: ./backend 
+        dockerfile: Dockerfile  
     image: backend_image
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
 

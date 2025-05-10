@@ -1,4 +1,5 @@
-const pool = require('../db');
+const pool = require('../../db');
+
 
 // Crear un menú
 const createMenuService = async (name) => {
@@ -30,10 +31,11 @@ const deleteMenuService = async (menuId) => {
   return result;  // Devuelve el resultado de la operación, si es necesario
 };
 
+
 module.exports = {
-  createMenuService,
-  getAllMenusService,
-  getMenuByIdService,
-  updateMenuService,
-  deleteMenuService,
+  create: createMenuService,
+  findAll: getAllMenusService,
+  findById: getMenuByIdService,
+  update: updateMenuService,
+  remove: deleteMenuService,
 };

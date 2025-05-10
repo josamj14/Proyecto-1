@@ -7,7 +7,8 @@ const restaurantRoutes = require('./routes/restaurantRoutes'); //Todo lo de Rest
 const reservationRoutes = require('./routes/reservationRoutes'); //Entidad reservation
 const orderRoutes = require('./routes/orderRoutes');  //entidad de orders
 const menuRoutes = require('./routes/menuRoutes');  //LOS MENUS 
-
+const authRoutes = require('./routes/authRoutes');  // Importar rutas de autenticación
+const checkJwt = require('./middleware/auth0');
 
 
 dotenv.config();
@@ -20,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 // Rutas públicas (sin autenticación)
-
+app.use('/api', authRoutes);  // Ruta para login
 app.use('/api', userRoutes);
 
 //Routes

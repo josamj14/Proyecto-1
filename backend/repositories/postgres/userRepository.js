@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../../db');
 
 //CREATE
 const createUserService = async (role, name, email, password) => {
@@ -21,7 +21,7 @@ async function loginUser(email) {
 }
 
 //UPDATE
-const updateUserService = async (id, name, email) => {
+const updateUserService = async (id, name, email, password) => {
   const result = await pool.query('SELECT update_user($1, $2, $3, $4)', [id, name, email, password]);
   return result.rows[0];
 };
@@ -32,19 +32,11 @@ const deleteUserService = async (id) => {
   return result.rows[0];
 };
 
-  // Llamar al procedimiento 'login_user' para obtener los detalles del usuario
-  const loginUserService = async (email) => {
-    const result = await pool.query('SELECT * FROM login_user($1)', [email]);
-    return result;  // Devuelve el resultado con el usuario encontrado
-  };
-
 module.exports = {
-    getAllUsersService,
-    getUserByIdService,
-    createUserService,
-    updateUserService,
-    deleteUserService,
-    loginUserService,
-  };
-
-  
+  create: createUserService,
+  findAll: getAllUsersService,
+  findById: getUserByIdService,
+  update: updateUserService,
+  remove: deleteUserService,
+  login: loginUser, 
+};

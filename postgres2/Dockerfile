@@ -8,6 +8,5 @@ CMD ["postgres", "-c", "shared_preload_libraries=pg_stat_statements", "-c", "pg_
 
 COPY create/ /docker-entrypoint-initdb.d/
 COPY store_procedures/ /docker-entrypoint-initdb.d/
-COPY tests/ /docker-entrypoint-initdb.d/
 
 RUN chmod 644 /docker-entrypoint-initdb.d/*.sql

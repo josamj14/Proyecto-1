@@ -15,6 +15,11 @@ BEGIN
         RAISE EXCEPTION 'Error: El correo % ya está registrado.', p_email;
     END IF;
 
+    -- Validar campos obligatorios
+    IF p_role IS NULL OR p_username IS NULL OR p_email IS NULL OR p_password IS NULL THEN
+        RAISE EXCEPTION 'Error: Todos los campos son obligatorios.';
+    END IF;
+
     INSERT INTO Users ("Role", Username, Email, "Password")
     VALUES (p_role, p_username, p_email, p_password)
     RETURNING User_ID INTO new_user_id;

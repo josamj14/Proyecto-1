@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../../db');
 
 // Crear un pedido
 const createOrderService = async (userId, datetime, restaurantId) => {
@@ -31,9 +31,9 @@ const deleteOrderService = async (orderId) => {
 };
 
 module.exports = {
-  createOrderService,
-  getAllOrdersService,
-  getOrderByIdService,
-  updateOrderService,
-  deleteOrderService,
+  create: createOrderService,
+  findAll: getAllOrdersService,
+  findById: getOrderByIdService,
+  update: updateOrderService,
+  remove: deleteOrderService,
 };

@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../../db');
 
 // Crear una nueva reserva
 const createReservationService = async (userId, datetime, capacity, tableId, restaurantId) => {
@@ -30,10 +30,11 @@ const deleteReservationService = async (reservationId) => {
   return result;  // Devuelve el resultado de la operación, si es necesario
 };
 
+
 module.exports = {
-  createReservationService,
-  getAllReservationsService,
-  getReservationByIdService,
-  updateReservationService,
-  deleteReservationService,
+  create: createReservationService,
+  findAll: getAllReservationsService,
+  findById: getReservationByIdService,
+  update: updateReservationService,
+  remove: deleteReservationService,
 };

@@ -1,4 +1,5 @@
-const pool = require('../db');
+const pool = require('../../db');
+
 
 // Crear restaurante
 const createRestaurantService = async (name, address) => {
@@ -30,10 +31,11 @@ const deleteRestaurantService = async (id) => {
   return result;  // Si el stored procedure no devuelve datos, puedes devolver un mensaje o un resultado genérico.
 };
 
+
 module.exports = {
-  createRestaurantService,
-  getAllRestaurantsService,
-  getRestaurantByIdService,
-  updateRestaurantService,
-  deleteRestaurantService,
+  create: createRestaurantService,
+  findAll: getAllRestaurantsService,
+  findById: getRestaurantByIdService,
+  update: updateRestaurantService,
+  remove: deleteRestaurantService,
 };

@@ -1,10 +1,5 @@
-const {
-    createOrderService,
-    getAllOrdersService,
-    getOrderByIdService,
-    updateOrderService,
-    deleteOrderService,
-  } = require('../models/orderModel.js');
+const { getRepository } = require("../repositories/respositoryFactory");
+const ordRepo = getRepository("order");
   
   // Respuesta estandarizada
   const handleResponse = (res, status, message, data = null) => {
@@ -19,7 +14,7 @@ const {
   const createOrder = async (req, res, next) => {
     const { userId, datetime, restaurantId } = req.body;
     try {
-      await createOrderService(userId, datetime, restaurantId);
+      await ordRepo.create(userId, datetime, restaurantId);
       handleResponse(res, 201, "Order created successfully");
     } catch (err) {
       next(err);
@@ -29,7 +24,7 @@ const {
   // Obtener todos los pedidos
   const getAllOrders = async (req, res, next) => {
     try {
-      const orders = await getAllOrdersService();
+      const orders = await ordRepo.findAll();
       handleResponse(res, 200, "Orders fetched successfully", orders);
     } catch (err) {
       next(err);
@@ -39,7 +34,7 @@ const {
   // Obtener un pedido por ID
   const getOrderById = async (req, res, next) => {
     try {
-      const order = await getOrderByIdService(req.params.id);
+      const order = await ordRepo.findById(req.params.id);
       if (!order) return handleResponse(res, 404, "Order not found");
       handleResponse(res, 200, "Order fetched successfully", order);
     } catch (err) {
@@ -51,7 +46,7 @@ const {
   const updateOrder = async (req, res, next) => {
     const { userId, datetime, restaurantId } = req.body;
     try {
-      const updatedOrder = await updateOrderService(req.params.id, userId, datetime, restaurantId);
+      const updatedOrder = await ordRepo.update(req.params.id, userId, datetime, restaurantId);
       if (!updatedOrder) return handleResponse(res, 404, "Order not found");
       handleResponse(res, 200, "Order updated successfully", updatedOrder);
     } catch (err) {
@@ -62,7 +57,7 @@ const {
   // Eliminar un pedido
   const deleteOrder = async (req, res, next) => {
     try {
-      const deletedOrder = await deleteOrderService(req.params.id);
+      const deletedOrder = await ordRepo.remove(req.params.id);
       if (!deletedOrder) return handleResponse(res, 404, "Order not found");
       handleResponse(res, 200, "Order deleted successfully");
     } catch (err) {
