@@ -1,5 +1,4 @@
-const pool = require('../../db');
-
+const pool = require('../../db/mongoClient');
 
 // Crear un menú
 const createMenuService = async (name) => {

@@ -1,4 +1,4 @@
-const pool = require('../../db');
+const pool = require('../../db/mongoClient');
 
 // Crear una nueva reserva
 const createReservationService = async (userId, datetime, capacity, tableId, restaurantId) => {

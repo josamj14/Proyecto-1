@@ -1,62 +1,65 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv'); 
-const pool = require('./db');
+const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
-const restaurantRoutes = require('./routes/restaurantRoutes'); //Todo lo de Restaurant
-const reservationRoutes = require('./routes/reservationRoutes'); //Entidad reservation
-const orderRoutes = require('./routes/orderRoutes');  //entidad de orders
-const menuRoutes = require('./routes/menuRoutes');  //LOS MENUS 
-const authRoutes = require('./routes/authRoutes');  // Importar rutas de autenticación
+const restaurantRoutes = require('./routes/restaurantRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const menuRoutes = require('./routes/menuRoutes');
+const authRoutes = require('./routes/authRoutes');
 const checkJwt = require('./middleware/auth0');
-
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
-pool.connect();
-//Middleware
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
 // Rutas públicas (sin autenticación)
-app.use('/api', authRoutes);  // Ruta para login
+app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
-//Routes
-//app.use('/api', checkJwt);  // Protege todas las rutas a continuación
+// app.use('/api', checkJwt); // Si quieres proteger el resto
 
-app.use('/api', restaurantRoutes); //Rutas de restaurantes
-app.use('/api', reservationRoutes);  //Rutas de las reservaciones
-app.use('/api', orderRoutes); // Rutas de pedidos
-app.use('/api', menuRoutes); // Rutas de menús
-//Error
+app.use('/api', restaurantRoutes);
+app.use('/api', reservationRoutes);
+app.use('/api', orderRoutes);
+app.use('/api', menuRoutes);
 
-
-// Testing postgres connection
-app.get("/", async (req, res) => {
+// DB startup (PostgreSQL or MongoDB)
+(async () => {
+  const dbType = process.env.DB_TYPE || 'postgres';
+  if (dbType === 'postgres') {
+    const pool = require('./db/pgClient'); // asegúrate que sea el archivo correcto
     try {
-        console.log("Start");
-        const result = await pool.query("SELECT current_database()");
-        console.log("result", result.rows);
-        res.send(`The database name is : ${result.rows[0].current_database}`);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
+      await pool.connect(); // solo necesario para PostgreSQL
+      console.log(' Connected to PostgreSQL');
+    } catch (err) {
+      console.error(' PostgreSQL connection failed:', err);
     }
-});
+  } else if (dbType === 'mongo') {
+    const connectMongo = require('./db/mongoClient');
+    try {
+      await connectMongo(); // MongoClient se conecta al invocarlo
+      console.log(' Connected to MongoDB');
+    } catch (err) {
+      console.error('MongoDB connection failed:', err);
+    }
+  }
+})();
 
+// Ruta de prueba
 app.get('/', (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'Hello World!'
-    });
+  res.status(200).json({
+    status: 'success',
+    message: 'Hello World!',
+  });
 });
 
-//Server Running
+// Server Running
 app.listen(port, () => {
-    console.log(`Server is running on localhost:${port}`);
+  console.log(` Server is running on http://localhost:${port}`);
 });
-
-//all routes will be here 

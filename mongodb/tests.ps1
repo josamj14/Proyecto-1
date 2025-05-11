@@ -1,12 +1,12 @@
 
 
 # Test 1: Obtain all posts by user id 
-Write-Host ' Obtain all posts by user id 123 '
+Write-Host ' Obtain all posts by user id 2 '
 
 docker exec -it mongos1 mongosh --eval @"
 db = db.getSiblingDB('socialnet');
-let posts = db.posts.find({ userId: 123 });
-print('Posts of user 123:', JSON.stringify(posts.toArray(), null, 2));
+let posts = db.posts.find({ userId: 2 });
+print('Posts of user 2:', JSON.stringify(posts.toArray(), null, 2));
 print(posts.explain('executionStats').executionStats.executionStages.shards);
 "@
 

@@ -1,9 +1,7 @@
-# Step 6: Adding data
-Write-Host ' Adding data...'
-docker exec -it mongos1 mongosh --eval @"
+
 db = db.getSiblingDB('restaurant');
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 500; i++) {
   db.users.insertOne({
     userId: i,
     role: 'Client',
@@ -12,12 +10,9 @@ for (let i = 0; i < 50; i++) {
     password: 'pass' + i
   });
 }
-"@
 
-docker exec -it mongos1 mongosh --eval @"
-db = db.getSiblingDB('restaurant');
 
-for (let j = 0; j < 50; j++) {
+for (let j = 0; j < 500; j++) {
   let products = [];
   for (let i = 0; i < 3; i++) {
     products.push({
@@ -35,7 +30,7 @@ for (let j = 0; j < 50; j++) {
   });
 }
 
-for (let k = 0; k < 50; k++) {
+for (let k = 0; k < 500; k++) {
   db.restaurant.insertOne({
     restaurantId: k,
     name: 'cool restaurant' + k,
@@ -49,12 +44,10 @@ for (let k = 0; k < 50; k++) {
     ]
   });
 }
-"@
 
-docker exec -it mongos1 mongosh --eval @"
 db = db.getSiblingDB('restaurant');
 
-for (let j = 0; j < 50; j++) {
+for (let j = 0; j < 500; j++) {
   db.order.insertOne({
     orderId: j,
     restaurantId: Math.floor(Math.random() * 51),
@@ -68,7 +61,7 @@ for (let j = 0; j < 50; j++) {
   });
 }
 
-for (let k = 0; k < 50; k++) {
+for (let k = 0; k < 500; k++) {
   db.reservation.insertOne({
     reservationId: k,
     restaurantId: k,
@@ -78,5 +71,29 @@ for (let k = 0; k < 50; k++) {
     datetime: new Date()
   });
 }
-"@
+
+
+
+db = db.getSiblingDB('socialnet');
+let posts1 = db.posts.find({ userId: 2 });
+print('Posts of user 2:', JSON.stringify(posts1.toArray(), null, 2));
+print(posts1.explain('executionStats').executionStats.executionStages.shards);
+
+db = db.getSiblingDB('socialnet');
+let posts2 = db.posts.find({ userId: 4000 });
+print('Posts of user 4000:', JSON.stringify(posts2.toArray(), null, 2));
+print(posts2.explain('executionStats').executionStats.executionStages.shards);
+
+db = db.getSiblingDB('socialnet');
+let comments = db.comments.find({ userId: 123 });
+print('Comentarios hechos por el usuario 123:');
+printjson(comments.toArray());
+print(comments.explain('executionStats').executionStats.executionStages.shards);
+
+
+
+
+
+
+
 

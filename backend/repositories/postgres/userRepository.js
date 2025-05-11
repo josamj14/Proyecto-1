@@ -1,4 +1,4 @@
-const pool = require('../../db');
+const pool = require('../../db/mongoClient');
 
 //CREATE
 const createUserService = async (role, name, email, password) => {

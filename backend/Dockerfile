@@ -12,7 +12,7 @@ RUN npm install
 RUN npm install express-jwt
 RUN npm install ---save-dev nodemon
 RUN npm install jest
-RUN npm install mongoose
+RUN npm install mongodb
 # Copiar el resto de los archivos del proyecto
 COPY . .
 

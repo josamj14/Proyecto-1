@@ -1,89 +1,65 @@
-const mongoose = require('mongoose');
+const connectMongo = require('../../db/mongoClient');
+const { ObjectId } = require('mongodb');
 
-const User = new mongoose.Schema({
-  userId: Number,
-  role: String,
-  username: String,
-  email: String,
-  password: String
-});
+let db;
 
-// Create a user
-const createUser = async (req, res) => {
-  try {
-    const { userId, role, username, email, password } = req.body;
-    const user = new User({ userId, role, username, email, password });
-    await user.save();
-    res.status(201).json({ message: 'User created', user });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+async function init() {
+  db = await connectMongo(); // ✅ this will call the actual function
+}
+
+init();
+
+// CREATE
+const createUser = async (role, name, email, password) => {
+  db = await connectMongo();
+  const user = { role, name, email, password };
+  const result = await db.collection('users').insertOne(user);
+  return { _id: result.insertedId, ...user };
 };
 
-// Get all users
-const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find(); // or db.find({}).toArray()
-    return res.json(users);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// READ ALL
+const findAll = async () => {
+  db = await connectMongo();
+  return await db.collection('users').find({}).toArray();
 };
 
-// Get user by ID
-const getUserById = async (req, res) => {
-  try {
-    const user = await User.findOne({ userId: parseInt(req.params.id) });
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// READ BY ID
+const findById = async (id) => {
+  db = await connect();
+  return await db.collection('users').findOne({ _id: new ObjectId(id) });
 };
 
-// Update user
-const updateUser = async (req, res) => {
-  try {
-    const updatedUser = await User.findOneAndUpdate(
-      { userId: parseInt(req.params.id) },
-      req.body,
-      { new: true }
-    );
-    if (!updatedUser) return res.status(404).json({ error: 'User not found' });
-    res.json({ message: 'User updated', user: updatedUser });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// LOGIN
+const login = async (email) => {
+  return await db.collection('users').findOne({ email });
 };
 
-// Delete user
-const deleteUser = async (req, res) => {
-  try {
-    const deletedUser = await User.findOneAndDelete({ userId: parseInt(req.params.id) });
-    if (!deletedUser) return res.status(404).json({ error: 'User not found' });
-    res.json({ message: 'User deleted' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// UPDATE
+const update = async (id, name, email, password) => {
+  const updateFields = {};
+  if (name) updateFields.name = name;
+  if (email) updateFields.email = email;
+  if (password) updateFields.password = password;
+
+  const result = await db.collection('users').findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    { $set: updateFields },
+    { returnDocument: 'after' }
+  );
+  return result.value;
 };
 
-// Login user
-const loginUser = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username, password }); // ⚠️ Don't use this in production (no hashing)
-    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
-    res.json({ message: 'Login successful', user });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// DELETE
+const remove = async (id) => {
+  const result = await db.collection('users').findOneAndDelete({ _id: new ObjectId(id) });
+  return result.value;
 };
 
 module.exports = {
   create: createUser,
-  findAll: getAllUsers,
-  findById: getUserById,
-  update: updateUser,
-  remove: deleteUser,
-  login: loginUser, 
+  findAll,
+  findById,
+  update,
+  remove,
+  login,
 };
