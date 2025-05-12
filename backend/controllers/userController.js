@@ -27,21 +27,21 @@ const createUser = async (req, res, next) => {
 const getAllUsers = async (req, res, next) => {
   try {
     const userRepo = getRepository("user");
-    // 🗝️ Generar la llave del caché
+    // Generar la llave del caché
     const cacheKey = getPrefixedKey("all_users");
 
-    // 🔄 Verificar si ya está en caché
+    // Verificar si ya está en caché
     const cachedData = await redisClient.get(cacheKey);
     if (cachedData) {
-      console.log("📌 Cache hit para todos los usuarios");
+      console.log(" Cache hit para todos los usuarios");
       return handleResponse(res, 200, "Users fetched successfully (cache)", JSON.parse(cachedData));
     }
 
-    // ⚠️ Cache Miss, ir a la base de datos
+    // Cache Miss, ir a la base de datos
     const users = await userRepo.findAll();
     handleResponse(res, 200, "Users fetched successfully", users);
 
-    // 🔄 Guardar en Redis
+    // Guardar en Redis
     await redisClient.set(cacheKey, JSON.stringify(users), {
       EX: 60 * 60, // Expira en 1 hora
     });
@@ -55,22 +55,22 @@ const getAllUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
   try {
     const userRepo = getRepository("user");
-    // 🗝️ Generar la llave del caché
+    // Generar la llave del caché
     const cacheKey = getPrefixedKey(`user:${req.params.id}`);
 
-    // 🔄 Verificar si ya está en caché
+    // Verificar si ya está en caché
     const cachedData = await redisClient.get(cacheKey);
     if (cachedData) {
-      console.log(`📌 Cache hit para el usuario con ID ${req.params.id}`);
+      console.log(` Cache hit para el usuario con ID ${req.params.id}`);
       return handleResponse(res, 200, "User fetched successfully (cache)", JSON.parse(cachedData));
     }
 
-    // ⚠️ Cache Miss, ir a la base de datos
+    // Cache Miss, ir a la base de datos
     const user = await userRepo.findById(req.params.id);
     if (!user) return handleResponse(res, 404, "User not found");
     handleResponse(res, 200, "User fetched successfully", user);
 
-    // 🔄 Guardar en Redis
+    // Guardar en Redis
     await redisClient.set(cacheKey, JSON.stringify(user), {
       EX: 60 * 60, // Expira en 1 hora
     });

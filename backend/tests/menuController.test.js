@@ -1,86 +1,86 @@
+
+jest.mock('../db/redisClient', () => ({
+  client: {
+    set: jest.fn(),
+    on: jest.fn(), 
+  },
+  getPrefixedKey: jest.fn((key) => `prefix:${key}`),
+}));
+
+
 const {
-    createMenu,
-    getAllMenus,
-    getMenuById,
-    updateMenu,
-    deleteMenu,
-  } = require('../controllers/menuController');
-  const {
-    createMenuService,
-    getAllMenusService,
-    getMenuByIdService,
-    updateMenuService,
-    deleteMenuService,
-  } = require('../models/menuModel');
-  
-  //MOCK for Menu tests
-  
-  jest.mock('../models/menuModel');
-  
-  describe('Menu Controller', () => {
-    let res, next;
-    beforeEach(() => {
-      res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      next = jest.fn();
+  createMenu,
+  getAllMenus,
+  getMenuById,
+  updateMenu,
+  deleteMenu,
+} = require('../controllers/menuController');
+
+const { getRepository } = require('../repositories/respositoryFactory');
+const { client: redisClient, getPrefixedKey } = require('../db/redisClient');
+
+jest.mock('../repositories/respositoryFactory');
+
+describe('menuController', () => {
+  let res, next, menuRepo;
+
+  beforeEach(() => {
+    menuRepo = {
+      findAll: jest.fn(),
+      findById: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      remove: jest.fn(),
+    };
+    getRepository.mockReturnValue(menuRepo);
+
+    redisClient.set = jest.fn();
+
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    next = jest.fn();
   });
 
-  // 1 Create Menu
-  test('createMenu should call createMenuService and respond with 201', async () => {
-    const req = { body: { name: 'Test Menu' } };
-    createMenuService.mockResolvedValue();
-
-    await createMenu(req, res, next);
-
-    expect(createMenuService).toHaveBeenCalledWith('Test Menu');
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({
-      status: 201,
-      message: 'Menu created successfully',
-      data: null,
-    });
-    
-  });
-
-  //2 Get All Menus
-  test('getAllMenus should return all menus with status 200', async () => {
-    const mockMenus = [{ id: 1, name: 'Menu 1' }, { id: 2, name: 'Menu 2' }];
-    getAllMenusService.mockResolvedValue(mockMenus);
+  test('getAllMenus - success', async () => {
+    const mockMenus = [{ id: 1, name: 'Menu 1' }];
+    menuRepo.findAll.mockResolvedValue(mockMenus);
+    getPrefixedKey.mockReturnValue('prefix:all_menus');
 
     await getAllMenus({}, res, next);
 
-    expect(getAllMenusService).toHaveBeenCalled();
+    expect(menuRepo.findAll).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       status: 200,
       message: 'Menus fetched successfully',
       data: mockMenus,
     });
+    expect(redisClient.set).toHaveBeenCalledWith('prefix:all_menus', JSON.stringify(mockMenus), { EX: 3600 });
   });
 
-  //3 Get Menu by ID
-  test('getMenuById should return a menu if found', async () => {
-    const req = { params: { id: 1 } };
-    const mockMenu = { id: 1, name: 'Test Menu' };
-    getMenuByIdService.mockResolvedValue(mockMenu);
+  test('getMenuById - found', async () => {
+    const req = { params: { id: '1' } };
+    const mockMenu = { id: 1, name: 'Menu 1' };
+    menuRepo.findById.mockResolvedValue(mockMenu);
+    getPrefixedKey.mockReturnValue('prefix:menu:1');
 
     await getMenuById(req, res, next);
 
-    expect(getMenuByIdService).toHaveBeenCalledWith(1);
+    expect(menuRepo.findById).toHaveBeenCalledWith('1');
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       status: 200,
       message: 'Menu fetched successfully',
       data: mockMenu,
     });
+    expect(redisClient.set).toHaveBeenCalledWith('prefix:menu:1', JSON.stringify(mockMenu), { EX: 3600 });
   });
 
-  // 4 Get Menu by ID - ID not found
-  test('getMenuById should return 404 if menu is not found', async () => {
-    const req = { params: { id: 99 } };
-    getMenuByIdService.mockResolvedValue(null);
+  test('getMenuById - not found', async () => {
+    const req = { params: { id: '999' } };
+    menuRepo.findById.mockResolvedValue(null);
 
     await getMenuById(req, res, next);
 
@@ -92,31 +92,57 @@ const {
     });
   });
 
-  // 5 Update Menu
-  test('updateMenu should update a menu and return 200', async () => {
-    const req = { params: { id: 1 }, body: { name: 'Updated Menu' } };
-    const mockUpdatedMenu = { id: 1, name: 'Updated Menu' };
-    updateMenuService.mockResolvedValue(mockUpdatedMenu);
+  test('createMenu - success', async () => {
+    const req = { body: { name: 'New Menu' } };
+
+    await createMenu(req, res, next);
+
+    expect(menuRepo.create).toHaveBeenCalledWith('New Menu');
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 201,
+      message: 'Menu created successfully',
+      data: null,
+    });
+  });
+
+  test('updateMenu - found', async () => {
+    const req = { params: { id: '1' }, body: { name: 'Updated Menu' } };
+    const updated = { id: 1, name: 'Updated Menu' };
+    menuRepo.update.mockResolvedValue(updated);
 
     await updateMenu(req, res, next);
 
-    expect(updateMenuService).toHaveBeenCalledWith(1, 'Updated Menu');
+    expect(menuRepo.update).toHaveBeenCalledWith('1', 'Updated Menu');
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       status: 200,
       message: 'Menu updated successfully',
-      data: mockUpdatedMenu,
+      data: updated,
     });
   });
 
-  // 6 Delete a menu
-  test('deleteMenu should delete a menu and return 200', async () => {
-    const req = { params: { id: 1 } };
-    deleteMenuService.mockResolvedValue(true);
+  test('updateMenu - not found', async () => {
+    const req = { params: { id: '999' }, body: { name: 'None' } };
+    menuRepo.update.mockResolvedValue(null);
+
+    await updateMenu(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Menu not found',
+      data: null,
+    });
+  });
+
+  test('deleteMenu - found', async () => {
+    const req = { params: { id: '1' } };
+    menuRepo.remove.mockResolvedValue(true);
 
     await deleteMenu(req, res, next);
 
-    expect(deleteMenuService).toHaveBeenCalledWith(1);
+    expect(menuRepo.remove).toHaveBeenCalledWith('1');
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       status: 200,
@@ -125,10 +151,9 @@ const {
     });
   });
 
-  // 7 Delete a menu - ID not found
-  test('deleteMenu should return 404 if menu not found', async () => {
-    const req = { params: { id: 99 } };
-    deleteMenuService.mockResolvedValue(null);
+  test('deleteMenu - not found', async () => {
+    const req = { params: { id: '999' } };
+    menuRepo.remove.mockResolvedValue(null);
 
     await deleteMenu(req, res, next);
 

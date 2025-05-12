@@ -55,22 +55,18 @@ const getAllReservations = async (req, res, next) => {
 const getReservationById = async (req, res, next) => {
   try {
     const resvRepo = getRepository("reservation");
-    // 🗝️ Generar la llave del caché
     const cacheKey = getPrefixedKey(`reservation:${req.params.id}`);
 
-    // 🔄 Verificar si ya está en caché
     const cachedData = await redisClient.get(cacheKey);
     if (cachedData) {
-      console.log(`📌 Cache hit para la reserva con ID ${req.params.id}`);
+      console.log(`Cache hit para la reserva con ID ${req.params.id}`);
       return handleResponse(res, 200, "Reservation fetched successfully (cache)", JSON.parse(cachedData));
     }
 
-    // ⚠️ Cache Miss, ir a la base de datos
     const reservation = await resvRepo.findById(req.params.id);
     if (!reservation) return handleResponse(res, 404, "Reservation not found");
     handleResponse(res, 200, "Reservation fetched successfully", reservation);
 
-    // 🔄 Guardar en Redis
     await redisClient.set(cacheKey, JSON.stringify(reservation), {
       EX: 60 * 60, // Expira en 1 hora
     });

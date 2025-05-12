@@ -3,7 +3,7 @@ const connectMongo = require('../../db/mongoClient');
 let db;
 
 async function init() {
-  db = await connectMongo(); // ✅ initialize DB connection
+  db = await connectMongo(); 
 }
 
 init();

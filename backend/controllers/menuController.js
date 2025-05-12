@@ -17,7 +17,7 @@ const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
       const menus = await menuRepo.findAll();
       handleResponse(res, 200, "Menus fetched successfully", menus);
   
-      // 🔄 Guardar en Redis
+      //  Guardar en Redis
       const cacheKey = getPrefixedKey("all_menus");
       await redisClient.set(cacheKey, JSON.stringify(menus), {
         EX: 60 * 60, // Expira en 1 hora

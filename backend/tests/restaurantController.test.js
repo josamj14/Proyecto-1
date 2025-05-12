@@ -1,3 +1,13 @@
+
+jest.mock('../db/redisClient', () => ({
+  client: {
+    get: jest.fn(),
+    set: jest.fn(),
+    on: jest.fn(), 
+  },
+  getPrefixedKey: jest.fn((key) => `prefix:${key}`),
+}));
+
 const {
   createRestaurant,
   getAllRestaurants,
@@ -6,133 +16,178 @@ const {
   deleteRestaurant,
 } = require('../controllers/restaurantController');
 
-const {
-  createRestaurantService,
-  getAllRestaurantsService,
-  getRestaurantByIdService,
-  updateRestaurantService,
-  deleteRestaurantService,
-} = require('../models/restaurantModel');
+const { getRepository } = require('../repositories/respositoryFactory');
+const { client: redisClient, getPrefixedKey } = require('../db/redisClient');
 
-jest.mock('../models/restaurantModel');
+jest.mock('../repositories/respositoryFactory');
 
-describe('Restaurant Controller Tests', () => {
-  let mockResponse, mockRequest, mockNext;
+describe('restaurantController', () => {
+  let res, next, restRepo;
 
   beforeEach(() => {
-    mockResponse = {
+    restRepo = {
+      create: jest.fn(),
+      findAll: jest.fn(),
+      findById: jest.fn(),
+      update: jest.fn(),
+      remove: jest.fn(),
+    };
+    getRepository.mockReturnValue(restRepo);
+
+    redisClient.get = jest.fn();
+    redisClient.set = jest.fn();
+
+    res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
-    mockNext = jest.fn();
+
+    next = jest.fn();
   });
 
-  // 1 Create a restaurant
-  test('should create a restaurant successfully', async () => {
-    mockRequest = { body: { name: 'Restaurant A', address: '123 Street' } };
-    createRestaurantService.mockResolvedValue();
+  test('createRestaurant - success', async () => {
+    const req = { body: { name: 'Taco Place', address: '123 St' } };
 
-    await createRestaurant(mockRequest, mockResponse, mockNext);
+    await createRestaurant(req, res, next);
 
-    expect(createRestaurantService).toHaveBeenCalledWith('Restaurant A', '123 Street');
-    expect(mockResponse.status).toHaveBeenCalledWith(201);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 201, message: "Restaurant created successfully", data: null });
+    expect(restRepo.create).toHaveBeenCalledWith('Taco Place', '123 St');
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 201,
+      message: 'Restaurant created successfully',
+      data: null,
+    });
   });
 
-  // 2 Get all restaurants
-  test('should return all restaurants', async () => {
-    const mockRestaurants = [{ id: 1, name: 'Restaurant A', address: '123 Street' }];
-    getAllRestaurantsService.mockResolvedValue(mockRestaurants);
+  test('getAllRestaurants - cache hit', async () => {
+    const cachedData = [{ id: 1 }];
+    redisClient.get.mockResolvedValue(JSON.stringify(cachedData));
+    getPrefixedKey.mockReturnValue('prefix:all_restaurants');
 
-    await getAllRestaurants({}, mockResponse, mockNext);
+    await getAllRestaurants({}, res, next);
 
-    expect(getAllRestaurantsService).toHaveBeenCalled();
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Restaurants fetched successfully", data: mockRestaurants });
+    expect(redisClient.get).toHaveBeenCalledWith('prefix:all_restaurants');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Restaurants fetched successfully (cache)',
+      data: cachedData,
+    });
   });
 
-  // 3 Get one restaurant by id 
-  test('should return a single restaurant if found', async () => {
-    mockRequest = { params: { id: 1 } };
-    const mockRestaurant = { id: 1, name: 'Restaurant A', address: '123 Street' };
-    getRestaurantByIdService.mockResolvedValue(mockRestaurant);
+  test('getAllRestaurants - cache miss', async () => {
+    redisClient.get.mockResolvedValue(null);
+    const dbData = [{ id: 1, name: 'Pizza Place' }];
+    restRepo.findAll.mockResolvedValue(dbData);
+    getPrefixedKey.mockReturnValue('prefix:all_restaurants');
 
-    await getRestaurantById(mockRequest, mockResponse, mockNext);
+    await getAllRestaurants({}, res, next);
 
-    expect(getRestaurantByIdService).toHaveBeenCalledWith(1);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Restaurant fetched successfully", data: mockRestaurant });
+    expect(restRepo.findAll).toHaveBeenCalled();
+    expect(redisClient.set).toHaveBeenCalledWith('prefix:all_restaurants', JSON.stringify(dbData), { EX: 3600 });
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Restaurants fetched successfully',
+      data: dbData,
+    });
   });
 
-  // 4 Get restaurant by id - ID not found
-  test('should return 404 if restaurant not found', async () => {
-    mockRequest = { params: { id: 99 } };
-    getRestaurantByIdService.mockResolvedValue(null);
+  test('getRestaurantById - cache hit', async () => {
+    const req = { params: { id: '1' } };
+    const cached = { id: 1 };
+    redisClient.get.mockResolvedValue(JSON.stringify(cached));
+    getPrefixedKey.mockReturnValue('prefix:restaurant:1');
 
-    await getRestaurantById(mockRequest, mockResponse, mockNext);
+    await getRestaurantById(req, res, next);
 
-    expect(getRestaurantByIdService).toHaveBeenCalledWith(99);
-    expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Restaurant not found", data: null });
+    expect(redisClient.get).toHaveBeenCalledWith('prefix:restaurant:1');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Restaurant fetched successfully (cache)',
+      data: cached,
+    });
   });
 
-  // 5 Uodate restaurant
-  test('should update a restaurant successfully', async () => {
-    mockRequest = { params: { id: 1 }, body: { name: 'Updated Restaurant', address: '456 Avenue' } };
-    const updatedRestaurant = { id: 1, name: 'Updated Restaurant', address: '456 Avenue' };
-    updateRestaurantService.mockResolvedValue(updatedRestaurant);
+  test('getRestaurantById - not found', async () => {
+    const req = { params: { id: '999' } };
+    redisClient.get.mockResolvedValue(null);
+    restRepo.findById.mockResolvedValue(null);
+    getPrefixedKey.mockReturnValue('prefix:restaurant:999');
 
-    await updateRestaurant(mockRequest, mockResponse, mockNext);
+    await getRestaurantById(req, res, next);
 
-    expect(updateRestaurantService).toHaveBeenCalledWith(1, 'Updated Restaurant', '456 Avenue');
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Restaurant updated successfully", data: updatedRestaurant });
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Restaurant not found',
+      data: null,
+    });
   });
 
-  //6 Update restaurant - ID not found
-  test('should return 404 if restaurant to update is not found', async () => {
-    mockRequest = { params: { id: 99 }, body: { name: 'Updated Restaurant', address: '456 Avenue' } };
-    updateRestaurantService.mockResolvedValue(null);
+  test('updateRestaurant - found', async () => {
+    const req = {
+      params: { id: '1' },
+      body: { name: 'Updated', address: 'New Ave' },
+    };
+    const updated = { id: 1, name: 'Updated' };
+    restRepo.update.mockResolvedValue(updated);
 
-    await updateRestaurant(mockRequest, mockResponse, mockNext);
+    await updateRestaurant(req, res, next);
 
-    expect(updateRestaurantService).toHaveBeenCalledWith(99, 'Updated Restaurant', '456 Avenue');
-    expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Restaurant not found", data: null });
+    expect(restRepo.update).toHaveBeenCalledWith('1', 'Updated', 'New Ave');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Restaurant updated successfully',
+      data: updated,
+    });
   });
 
-  //7 Delete restaurant 
-  test('should delete a restaurant successfully', async () => {
-    mockRequest = { params: { id: 1 } };
-    deleteRestaurantService.mockResolvedValue(true);
+  test('updateRestaurant - not found', async () => {
+    const req = {
+      params: { id: '999' },
+      body: { name: 'None', address: 'Nowhere' },
+    };
+    restRepo.update.mockResolvedValue(null);
 
-    await deleteRestaurant(mockRequest, mockResponse, mockNext);
+    await updateRestaurant(req, res, next);
 
-    expect(deleteRestaurantService).toHaveBeenCalledWith(1);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Restaurant deleted successfully", data: null });
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Restaurant not found',
+      data: null,
+    });
   });
 
-  // 8 Del restaurant - ID not found
-  test('should return 404 if restaurant to delete is not found', async () => {
-    mockRequest = { params: { id: 99 } };
-    deleteRestaurantService.mockResolvedValue(null);
+  test('deleteRestaurant - success', async () => {
+    const req = { params: { id: '1' } };
+    restRepo.remove.mockResolvedValue(true);
 
-    await deleteRestaurant(mockRequest, mockResponse, mockNext);
+    await deleteRestaurant(req, res, next);
 
-    expect(deleteRestaurantService).toHaveBeenCalledWith(99);
-    expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Restaurant not found", data: null });
+    expect(restRepo.remove).toHaveBeenCalledWith('1');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Restaurant deleted successfully',
+      data: null,
+    });
   });
 
-  // 9 Errir from database
-  test('should pass errors to next middleware', async () => {
-    mockRequest = { params: { id: 1 } };
-    const error = new Error("Database error");
-    getRestaurantByIdService.mockRejectedValue(error);
+  test('deleteRestaurant - not found', async () => {
+    const req = { params: { id: '999' } };
+    restRepo.remove.mockResolvedValue(null);
 
-    await getRestaurantById(mockRequest, mockResponse, mockNext);
+    await deleteRestaurant(req, res, next);
 
-    expect(mockNext).toHaveBeenCalledWith(error);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Restaurant not found',
+      data: null,
+    });
   });
 });

@@ -1,3 +1,13 @@
+
+jest.mock('../db/redisClient', () => ({
+  client: {
+    get: jest.fn(),
+    set: jest.fn(),
+    on: jest.fn(), 
+  },
+  getPrefixedKey: jest.fn((key) => `prefix:${key}`),
+}));
+
 const {
   createOrder,
   getAllOrders,
@@ -6,134 +16,180 @@ const {
   deleteOrder,
 } = require('../controllers/orderController');
 
-const {
-  createOrderService,
-  getAllOrdersService,
-  getOrderByIdService,
-  updateOrderService,
-  deleteOrderService,
-} = require('../models/orderModel');
+const { getRepository } = require('../repositories/respositoryFactory');
+const { client: redisClient, getPrefixedKey } = require('../db/redisClient');
 
-// MOCK for Model Tests
-jest.mock('../models/orderModel');
+jest.mock('../repositories/respositoryFactory');
 
-describe('Order Controller Tests', () => {
-  let mockResponse, mockRequest, mockNext;
+describe('orderController', () => {
+  let res, next, ordRepo;
 
   beforeEach(() => {
-    mockResponse = {
+    ordRepo = {
+      create: jest.fn(),
+      findAll: jest.fn(),
+      findById: jest.fn(),
+      update: jest.fn(),
+      remove: jest.fn(),
+    };
+    getRepository.mockReturnValue(ordRepo);
+
+    redisClient.get = jest.fn();
+    redisClient.set = jest.fn();
+
+    res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
-    mockNext = jest.fn();
-});
 
-  // 1 Create Order 
-test('should create an order successfully', async () => {
-  mockRequest = { body: { userId: 1, datetime: '2025-03-25 12:00:00', restaurantId: 2 } };
-  createOrderService.mockResolvedValue();
+    next = jest.fn();
+  });
 
-  await createOrder(mockRequest, mockResponse, mockNext);
+  test('createOrder - success', async () => {
+    const req = { body: { userId: 1, datetime: '2025-05-12', restaurantId: 2 } };
 
-  expect(createOrderService).toHaveBeenCalledWith(1, '2025-03-25 12:00:00', 2);
-  expect(mockResponse.status).toHaveBeenCalledWith(201);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 201, message: "Order created successfully", data: null });
-});
+    await createOrder(req, res, next);
 
-// 2 Get All Orders
-test('should return all orders', async () => {
-  const mockOrders = [{ id: 1, userId: 1, datetime: '2025-03-25 12:00:00', restaurantId: 2 }];
-  getAllOrdersService.mockResolvedValue(mockOrders);
+    expect(ordRepo.create).toHaveBeenCalledWith(1, '2025-05-12', 2);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 201,
+      message: 'Order created successfully',
+      data: null,
+    });
+  });
 
-  await getAllOrders({}, mockResponse, mockNext);
+  test('getAllOrders - cache hit', async () => {
+    const cachedOrders = [{ id: 1, userId: 1 }];
+    redisClient.get.mockResolvedValue(JSON.stringify(cachedOrders));
 
-  expect(getAllOrdersService).toHaveBeenCalled();
-  expect(mockResponse.status).toHaveBeenCalledWith(200);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Orders fetched successfully", data: mockOrders });
-});
+    getPrefixedKey.mockReturnValue('prefix:all_orders');
 
-// 3 Get Order by ID
-test('should return a single order if found', async () => {
-  mockRequest = { params: { id: 1 } };
-  const mockOrder = { id: 1, userId: 1, datetime: '2025-03-25 12:00:00', restaurantId: 2 };
-  getOrderByIdService.mockResolvedValue(mockOrder);
+    await getAllOrders({}, res, next);
 
-  await getOrderById(mockRequest, mockResponse, mockNext);
+    expect(redisClient.get).toHaveBeenCalledWith('prefix:all_orders');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Orders fetched successfully (cache)',
+      data: cachedOrders,
+    });
+  });
 
-  expect(getOrderByIdService).toHaveBeenCalledWith(1);
-  expect(mockResponse.status).toHaveBeenCalledWith(200);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Order fetched successfully", data: mockOrder });
-});
+  test('getAllOrders - cache miss', async () => {
+    redisClient.get.mockResolvedValue(null);
+    const dbOrders = [{ id: 1 }];
+    ordRepo.findAll.mockResolvedValue(dbOrders);
 
-// 4 Get Order by ID - ID not found
-test('should return 404 if order not found', async () => {
-  mockRequest = { params: { id: 99 } };
-  getOrderByIdService.mockResolvedValue(null);
+    getPrefixedKey.mockReturnValue('prefix:all_orders');
 
-  await getOrderById(mockRequest, mockResponse, mockNext);
+    await getAllOrders({}, res, next);
 
-  expect(getOrderByIdService).toHaveBeenCalledWith(99);
-  expect(mockResponse.status).toHaveBeenCalledWith(404);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Order not found", data: null });
-});
+    expect(ordRepo.findAll).toHaveBeenCalled();
+    expect(redisClient.set).toHaveBeenCalledWith('prefix:all_orders', JSON.stringify(dbOrders), { EX: 3600 });
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Orders fetched successfully',
+      data: dbOrders,
+    });
+  });
 
-// 5 Update Order 
-test('should update an order successfully', async () => {
-  mockRequest = { params: { id: 1 }, body: { userId: 2, datetime: '2025-03-26 14:00:00', restaurantId: 3 } };
-  const updatedOrder = { id: 1, userId: 2, datetime: '2025-03-26 14:00:00', restaurantId: 3 };
-  updateOrderService.mockResolvedValue(updatedOrder);
+  test('getOrderById - cache hit', async () => {
+    const req = { params: { id: '1' } };
+    const cachedOrder = { id: 1 };
+    redisClient.get.mockResolvedValue(JSON.stringify(cachedOrder));
+    getPrefixedKey.mockReturnValue('prefix:order:1');
 
-  await updateOrder(mockRequest, mockResponse, mockNext);
+    await getOrderById(req, res, next);
 
-  expect(updateOrderService).toHaveBeenCalledWith(1, 2, '2025-03-26 14:00:00', 3);
-  expect(mockResponse.status).toHaveBeenCalledWith(200);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Order updated successfully", data: updatedOrder });
-});
+    expect(redisClient.get).toHaveBeenCalledWith('prefix:order:1');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Order fetched successfully (cache)',
+      data: cachedOrder,
+    });
+  });
 
-// 6 Update Order - ID not found 
-test('should return 404 if order to update is not found', async () => {
-  mockRequest = { params: { id: 99 }, body: { userId: 2, datetime: '2025-03-26 14:00:00', restaurantId: 3 } };
-  updateOrderService.mockResolvedValue(null);
+  test('getOrderById - not found', async () => {
+    const req = { params: { id: '999' } };
+    redisClient.get.mockResolvedValue(null);
+    ordRepo.findById.mockResolvedValue(null);
+    getPrefixedKey.mockReturnValue('prefix:order:999');
 
-  await updateOrder(mockRequest, mockResponse, mockNext);
+    await getOrderById(req, res, next);
 
-  expect(updateOrderService).toHaveBeenCalledWith(99, 2, '2025-03-26 14:00:00', 3);
-  expect(mockResponse.status).toHaveBeenCalledWith(404);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Order not found", data: null });
-});
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Order not found',
+      data: null,
+    });
+  });
 
-// 7 Delete Order 
-test('should delete an order successfully', async () => {
-  mockRequest = { params: { id: 1 } };
-  deleteOrderService.mockResolvedValue(true);
+  test('updateOrder - found', async () => {
+    const req = {
+      params: { id: '1' },
+      body: { userId: 1, datetime: '2025-05-12', restaurantId: 2 },
+    };
+    const updatedOrder = { id: 1, userId: 1 };
+    ordRepo.update.mockResolvedValue(updatedOrder);
 
-  await deleteOrder(mockRequest, mockResponse, mockNext);
+    await updateOrder(req, res, next);
 
-  expect(deleteOrderService).toHaveBeenCalledWith(1);
-  expect(mockResponse.status).toHaveBeenCalledWith(200);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Order deleted successfully", data: null });
-});
+    expect(ordRepo.update).toHaveBeenCalledWith('1', 1, '2025-05-12', 2);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Order updated successfully',
+      data: updatedOrder,
+    });
+  });
 
-// 8 Delete  Order - ID not found
-test('should return 404 if order to delete is not found', async () => {
-  mockRequest = { params: { id: 99 } };
-  deleteOrderService.mockResolvedValue(null);
+  test('updateOrder - not found', async () => {
+    const req = {
+      params: { id: '999' },
+      body: { userId: 1, datetime: 'x', restaurantId: 1 },
+    };
+    ordRepo.update.mockResolvedValue(null);
 
-  await deleteOrder(mockRequest, mockResponse, mockNext);
+    await updateOrder(req, res, next);
 
-  expect(deleteOrderService).toHaveBeenCalledWith(99);
-  expect(mockResponse.status).toHaveBeenCalledWith(404);
-  expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Order not found", data: null });
-});
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Order not found',
+      data: null,
+    });
+  });
 
-// 9 Error Handling
-test('should pass errors to next middleware', async () => {
-  mockRequest = { params: { id: 1 } };
-  const error = new Error("Database error");
-  getOrderByIdService.mockRejectedValue(error);
+  test('deleteOrder - success', async () => {
+    const req = { params: { id: '1' } };
+    ordRepo.remove.mockResolvedValue(true);
 
-  await getOrderById(mockRequest, mockResponse, mockNext);
+    await deleteOrder(req, res, next);
 
-  expect(mockNext).toHaveBeenCalledWith(error);
-});
+    expect(ordRepo.remove).toHaveBeenCalledWith('1');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Order deleted successfully',
+      data: null,
+    });
+  });
+
+  test('deleteOrder - not found', async () => {
+    const req = { params: { id: '999' } };
+    ordRepo.remove.mockResolvedValue(null);
+
+    await deleteOrder(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Order not found',
+      data: null,
+    });
+  });
 });

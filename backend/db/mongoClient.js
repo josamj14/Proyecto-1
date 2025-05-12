@@ -11,7 +11,7 @@ async function connectMongo() {
   } catch (e) {
     console.error(e);
   }    
-  return client.db(db_name); // or return client if you want access to client
+  return client.db(db_name); 
   }
 
 module.exports = connectMongo; 

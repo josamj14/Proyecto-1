@@ -1,3 +1,13 @@
+
+jest.mock('../db/redisClient', () => ({
+  client: {
+    get: jest.fn(),
+    set: jest.fn(),
+    on: jest.fn(), 
+  },
+  getPrefixedKey: jest.fn((key) => `prefix:${key}`),
+}));
+
 const {
   createReservation,
   getAllReservations,
@@ -6,135 +16,180 @@ const {
   deleteReservation,
 } = require('../controllers/reservationController');
 
-const {
-  createReservationService,
-  getAllReservationsService,
-  getReservationByIdService,
-  updateReservationService,
-  deleteReservationService,
-} = require('../models/reservationModel');
+const { getRepository } = require('../repositories/respositoryFactory');
+const { client: redisClient, getPrefixedKey } = require('../db/redisClient');
 
-// MOCK 
+jest.mock('../repositories/respositoryFactory');
 
-jest.mock('../models/reservationModel');
-  
-describe('Reservation Controller Tests', () => {
-  let mockResponse, mockRequest, mockNext;
+describe('reservationController', () => {
+  let res, next, resvRepo;
 
   beforeEach(() => {
-    mockResponse = {
+    resvRepo = {
+      create: jest.fn(),
+      findAll: jest.fn(),
+      findById: jest.fn(),
+      update: jest.fn(),
+      remove: jest.fn(),
+    };
+    getRepository.mockReturnValue(resvRepo);
+
+    redisClient.get = jest.fn();
+    redisClient.set = jest.fn();
+
+    res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
-    mockNext = jest.fn();
+
+    next = jest.fn();
   });
 
-  // 1 Create a reservation
-  test('should create a reservation successfully', async () => {
-    mockRequest = { body: { userId: 1, datetime: '2025-03-25 18:00:00', capacity: 4, tableId: 2, restaurantId: 3 } };
-    createReservationService.mockResolvedValue();
+  test('createReservation - success', async () => {
+    const req = {
+      body: { userId: 1, datetime: '2025-05-12T10:00', capacity: 4, tableId: 2, restaurantId: 3 },
+    };
 
-    await createReservation(mockRequest, mockResponse, mockNext);
+    await createReservation(req, res, next);
 
-    expect(createReservationService).toHaveBeenCalledWith(1, '2025-03-25 18:00:00', 4, 2, 3);
-    expect(mockResponse.status).toHaveBeenCalledWith(201);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 201, message: "Reservation created successfully", data: null });
+    expect(resvRepo.create).toHaveBeenCalledWith(1, '2025-05-12T10:00', 4, 2, 3);
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 201,
+      message: 'Reservation created successfully',
+      data: null,
+    });
   });
 
-  // 2 Get all reservations
-  test('should return all reservations', async () => {
-    const mockReservations = [{ id: 1, userId: 1, datetime: '2025-03-25 18:00:00', capacity: 4, tableId: 2, restaurantId: 3 }];
-    getAllReservationsService.mockResolvedValue(mockReservations);
+  test('getAllReservations - cache hit', async () => {
+    const cached = [{ id: 1 }];
+    redisClient.get.mockResolvedValue(JSON.stringify(cached));
+    getPrefixedKey.mockReturnValue('prefix:all_reservations');
 
-    await getAllReservations({}, mockResponse, mockNext);
+    await getAllReservations({}, res, next);
 
-    expect(getAllReservationsService).toHaveBeenCalled();
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Reservations fetched successfully", data: mockReservations });
+    expect(redisClient.get).toHaveBeenCalledWith('prefix:all_reservations');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Reservations fetched successfully (cache)',
+      data: cached,
+    });
   });
 
-  // 3 Get reservation by ID
-  test('should return a single reservation if found', async () => {
-    mockRequest = { params: { id: 1 } };
-    const mockReservation = { id: 1, userId: 1, datetime: '2025-03-25 18:00:00', capacity: 4, tableId: 2, restaurantId: 3 };
-    getReservationByIdService.mockResolvedValue(mockReservation);
+  test('getAllReservations - cache miss', async () => {
+    redisClient.get.mockResolvedValue(null);
+    const dbData = [{ id: 2 }];
+    resvRepo.findAll.mockResolvedValue(dbData);
+    getPrefixedKey.mockReturnValue('prefix:all_reservations');
 
-    await getReservationById(mockRequest, mockResponse, mockNext);
+    await getAllReservations({}, res, next);
 
-    expect(getReservationByIdService).toHaveBeenCalledWith(1);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Reservation fetched successfully", data: mockReservation });
+    expect(resvRepo.findAll).toHaveBeenCalled();
+    expect(redisClient.set).toHaveBeenCalledWith('prefix:all_reservations', JSON.stringify(dbData), { EX: 3600 });
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Reservations fetched successfully',
+      data: dbData,
+    });
   });
 
-  // 4 Get reservation by ID - ID not found
-  test('should return 404 if reservation not found', async () => {
-    mockRequest = { params: { id: 99 } };
-    getReservationByIdService.mockResolvedValue(null);
+  test('getReservationById - cache hit', async () => {
+    const req = { params: { id: '1' } };
+    const cached = { id: 1 };
+    redisClient.get.mockResolvedValue(JSON.stringify(cached));
+    getPrefixedKey.mockReturnValue('prefix:reservation:1');
 
-    await getReservationById(mockRequest, mockResponse, mockNext);
+    await getReservationById(req, res, next);
 
-    expect(getReservationByIdService).toHaveBeenCalledWith(99);
-    expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Reservation not found", data: null });
+    expect(redisClient.get).toHaveBeenCalledWith('prefix:reservation:1');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Reservation fetched successfully (cache)',
+      data: cached,
+    });
   });
 
-  // 5 Update reservation
-  test('should update a reservation successfully', async () => {
-    mockRequest = { params: { id: 1 }, body: { userId: 2, datetime: '2025-03-26 19:00:00', capacity: 4, tableId: 3, restaurantId: 2 } };
-    const updatedReservation = { id: 1, userId: 2, datetime: '2025-03-26 19:00:00', capacity: 4, tableId: 3, restaurantId: 2 };
-    updateReservationService.mockResolvedValue(updatedReservation);
+  test('getReservationById - not found', async () => {
+    const req = { params: { id: '999' } };
+    redisClient.get.mockResolvedValue(null);
+    resvRepo.findById.mockResolvedValue(null);
+    getPrefixedKey.mockReturnValue('prefix:reservation:999');
 
-    await updateReservation(mockRequest, mockResponse, mockNext);
+    await getReservationById(req, res, next);
 
-    expect(updateReservationService).toHaveBeenCalledWith(1, 2, '2025-03-26 19:00:00', 4, 3, 2);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Reservation updated successfully", data: updatedReservation });
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Reservation not found',
+      data: null,
+    });
   });
 
-  // 6 Update a reservation - ID not found
-  test('should return 404 if reservation to update is not found', async () => {
-    mockRequest = { params: { id: 99 }, body: { userId: 2, datetime: '2025-03-26 19:00:00', capacity: 4, tableId: 3, restaurantId: 2 } };
-    updateReservationService.mockResolvedValue(null);
+  test('updateReservation - success', async () => {
+    const req = {
+      params: { id: '1' },
+      body: { userId: 1, datetime: '2025-05-12', capacity: 4, tableId: 2, restaurantId: 3 },
+    };
+    const updated = { id: 1, capacity: 4 };
+    resvRepo.update.mockResolvedValue(updated);
 
-    await updateReservation(mockRequest, mockResponse, mockNext);
+    await updateReservation(req, res, next);
 
-    expect(updateReservationService).toHaveBeenCalledWith(99, 2, '2025-03-26 19:00:00', 4, 3, 2);
-    expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Reservation not found", data: null });
+    expect(resvRepo.update).toHaveBeenCalledWith('1', 1, '2025-05-12', 4, 2, 3);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Reservation updated successfully',
+      data: updated,
+    });
   });
 
-  // 7 Delete a reservation
-  test('should delete a reservation successfully', async () => {
-    mockRequest = { params: { id: 1 } };
-    deleteReservationService.mockResolvedValue(true);
+  test('updateReservation - not found', async () => {
+    const req = {
+      params: { id: '999' },
+      body: { userId: 1, datetime: '', capacity: 1, tableId: 1, restaurantId: 1 },
+    };
+    resvRepo.update.mockResolvedValue(null);
 
-    await deleteReservation(mockRequest, mockResponse, mockNext);
+    await updateReservation(req, res, next);
 
-    expect(deleteReservationService).toHaveBeenCalledWith(1);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 200, message: "Reservation deleted successfully", data: null });
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Reservation not found',
+      data: null,
+    });
   });
 
-  // 8 Delete reservation - ID not found
-  test('should return 404 if reservation to delete is not found', async () => {
-    mockRequest = { params: { id: 99 } };
-    deleteReservationService.mockResolvedValue(null);
+  test('deleteReservation - success', async () => {
+    const req = { params: { id: '1' } };
+    resvRepo.remove.mockResolvedValue(true);
 
-    await deleteReservation(mockRequest, mockResponse, mockNext);
+    await deleteReservation(req, res, next);
 
-    expect(deleteReservationService).toHaveBeenCalledWith(99);
-    expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.json).toHaveBeenCalledWith({ status: 404, message: "Reservation not found", data: null });
+    expect(resvRepo.remove).toHaveBeenCalledWith('1');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 200,
+      message: 'Reservation deleted successfully',
+      data: null,
+    });
   });
 
-  // 9 Error frpm db 
-  test('should pass errors to next middleware', async () => {
-    mockRequest = { params: { id: 1 } };
-    const error = new Error("Database error");
-    getReservationByIdService.mockRejectedValue(error);
+  test('deleteReservation - not found', async () => {
+    const req = { params: { id: '999' } };
+    resvRepo.remove.mockResolvedValue(null);
 
-    await getReservationById(mockRequest, mockResponse, mockNext);
+    await deleteReservation(req, res, next);
 
-    expect(mockNext).toHaveBeenCalledWith(error);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      status: 404,
+      message: 'Reservation not found',
+      data: null,
+    });
   });
 });
