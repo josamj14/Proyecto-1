@@ -1,6 +1,6 @@
 const { getRepository } = require("../repositories/respositoryFactory");
 //const { getRepository } = require("../repositories/postgres/menuRepository");
-const menuRepo = getRepository("menu");
+
 
 console.log("🔍 Repositorio cargado:", menuRepo);
 
@@ -19,6 +19,7 @@ const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
   
   const getAllMenus = async (req, res, next) => {
     try {
+      const menuRepo = getRepository("menu");
       const menus = await menuRepo.findAll();
       handleResponse(res, 200, "Menus fetched successfully", menus);
   
@@ -34,12 +35,13 @@ const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
   
   const getMenuById = async (req, res, next) => {
     try {
+      const menuRepo = getRepository("menu");
       const menu = await menuRepo.findById(req.params.id);
       if (!menu) return handleResponse(res, 404, "Menu not found");
   
       handleResponse(res, 200, "Menu fetched successfully", menu);
   
-      // 🔄 Guardar en Redis
+      // Guardar en Redis
       const cacheKey = getPrefixedKey(`menu:${req.params.id}`);
       await redisClient.set(cacheKey, JSON.stringify(menu), {
         EX: 60 * 60,
@@ -55,6 +57,7 @@ const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
   const createMenu = async (req, res, next) => {
     const { name } = req.body;
     try {
+      const menuRepo = getRepository("menu");
       await menuRepo.create(name);
       handleResponse(res, 201, "Menu created successfully");
     } catch (err) {
@@ -66,6 +69,7 @@ const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
   const updateMenu = async (req, res, next) => {
     const { name } = req.body;
     try {
+      const menuRepo = getRepository("menu");
       const updatedMenu = await menuRepo.update(req.params.id, name);
       if (!updatedMenu) return handleResponse(res, 404, "Menu not found");
       handleResponse(res, 200, "Menu updated successfully", updatedMenu);
@@ -77,6 +81,7 @@ const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
   // Eliminar un menú
   const deleteMenu = async (req, res, next) => {
     try {
+      const menuRepo = getRepository("menu");
       const deletedMenu = await menuRepo.remove(req.params.id);
       if (!deletedMenu) return handleResponse(res, 404, "Menu not found");
       handleResponse(res, 200, "Menu deleted successfully");
