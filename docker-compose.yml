@@ -19,6 +19,8 @@ services:
       retries: 5
       start_period: 60s
       timeout: 5s
+    networks:
+      - backend-network   # Agregado aquí AGREGUÉ UN NET PORQUE NO ME  LEVANTA EL POSTGRESS.
 
   backend:
     container_name: backend
@@ -33,6 +35,23 @@ services:
       - "3000:3000"
     networks:
       - mongo-replica-sharding
+      - backend-network   # Agregado aquí EL  NET ATTE PIKI ME CAGO EN TODO :3 
+
+#------------------------REDIS------------------------------------|
+#Levantando el servicio de redis en el compose.
+  redis:
+    container_name: redis
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    networks:
+      - mongo-replica-sharding
+
 
   mongors1n1:
     container_name: mongors1n1
@@ -262,4 +281,6 @@ volumes:
 
 networks:
   mongo-replica-sharding:
+    driver: bridge
+  backend-network:   # Nueva red agregada
     driver: bridge

@@ -1,6 +1,13 @@
 const { getRepository } = require("../repositories/respositoryFactory");
+//const { getRepository } = require("../repositories/postgres/menuRepository");
 const menuRepo = getRepository("menu");
-  
+
+console.log("🔍 Repositorio cargado:", menuRepo);
+
+
+const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
+
+
   // Respuesta estandarizada
   const handleResponse = (res, status, message, data = null) => {
     res.status(status).json({
@@ -10,33 +17,46 @@ const menuRepo = getRepository("menu");
     });
   };
   
+  const getAllMenus = async (req, res, next) => {
+    try {
+      const menus = await menuRepo.findAll();
+      handleResponse(res, 200, "Menus fetched successfully", menus);
+  
+      // 🔄 Guardar en Redis
+      const cacheKey = getPrefixedKey("all_menus");
+      await redisClient.set(cacheKey, JSON.stringify(menus), {
+        EX: 60 * 60, // Expira en 1 hora
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+  
+  const getMenuById = async (req, res, next) => {
+    try {
+      const menu = await menuRepo.findById(req.params.id);
+      if (!menu) return handleResponse(res, 404, "Menu not found");
+  
+      handleResponse(res, 200, "Menu fetched successfully", menu);
+  
+      // 🔄 Guardar en Redis
+      const cacheKey = getPrefixedKey(`menu:${req.params.id}`);
+      await redisClient.set(cacheKey, JSON.stringify(menu), {
+        EX: 60 * 60,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+  
+  
+
   // Crear un menú
   const createMenu = async (req, res, next) => {
     const { name } = req.body;
     try {
       await menuRepo.create(name);
       handleResponse(res, 201, "Menu created successfully");
-    } catch (err) {
-      next(err);
-    }
-  };
-  
-  // Obtener todos los menús
-  const getAllMenus = async (req, res, next) => {
-    try {
-      const menus = await menuRepo.findAll();
-      handleResponse(res, 200, "Menus fetched successfully", menus);
-    } catch (err) {
-      next(err);
-    }
-  };
-  
-  // Obtener un menú por ID
-  const getMenuById = async (req, res, next) => {
-    try {
-      const menu = await menuRepo.findById(req.params.id);
-      if (!menu) return handleResponse(res, 404, "Menu not found");
-      handleResponse(res, 200, "Menu fetched successfully", menu);
     } catch (err) {
       next(err);
     }

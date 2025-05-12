@@ -1,7 +1,11 @@
 require('dotenv').config();
 const dbType = process.env.DB_TYPE || 'postgres';
 
-function getRepository(entity){
+console.log("🔍 DB_TYPE leída al inicio:", dbType); // Verificar el tipo de DB al inicio
+
+function getRepository(entity) {
+    console.log("📌 Solicitando repositorio para la entidad:", entity); // Verificar el nombre de la entidad
+
     const repositories = {
         postgres: {
             user: require('./postgres/userRepository'),
@@ -18,7 +22,15 @@ function getRepository(entity){
             reservation: require('./mongo/reservationRepository'),
         }
     };
-    return repositories[dbType][entity];
+
+    const repo = repositories[dbType][entity];
+
+    console.log("🔎 Repositorio encontrado:", repo); // Verificar si encontró el repositorio
+    if (!repo) {
+        console.error(`❌ No se encontró el repositorio para la entidad ${entity} en ${dbType}`);
+    }
+
+    return repo;
 }
 
 module.exports = { getRepository };
