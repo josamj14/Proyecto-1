@@ -1,5 +1,4 @@
 const connectMongo = require('../../db/mongoClient');
-const { ObjectId } = require('mongodb');
 
 let db;
 
@@ -10,49 +9,64 @@ async function init() {
 init();
 
 // CREATE
-const createUser = async (role, name, email, password) => {
-  db = await connectMongo();
-  const user = { role, name, email, password };
-  const result = await db.collection('users').insertOne(user);
-  return { _id: result.insertedId, ...user };
+const createUser = async (role, username, email, password) => {
+  const db = await connectMongo();
+
+  // Find the max current userId (assuming it exists as a number)
+  const lastUser = await db.collection('users')
+    .find({})
+    .sort({ userId: -1 })
+    .limit(1)
+    .toArray();
+
+  const maxUserId = lastUser.length > 0 ? lastUser[0].userId : 0;
+
+  const newUser = {
+    userId: maxUserId + 1,
+    role,
+    username,
+    email,
+    password
+  };
+
+  const result = await db.collection('users').insertOne(newUser);
+  return { _id: result.insertedId, ...newUser };
 };
 
 // READ ALL
 const findAll = async () => {
-  db = await connectMongo();
   return await db.collection('users').find({}).toArray();
 };
 
 // READ BY ID
 const findById = async (id) => {
-  db = await connect();
-  return await db.collection('users').findOne({ _id: new ObjectId(id) });
+  return await db.collection('users').findOne({ userId: Number(id) });
 };
 
 // LOGIN
-const login = async (email) => {
-  return await db.collection('users').findOne({ email });
+const login = async (em) => {
+  return await db.collection('users').findOne({ email: em });
 };
 
 // UPDATE
-const update = async (id, name, email, password) => {
+const update = async (userId, name, email, password) => {
   const updateFields = {};
-  if (name) updateFields.name = name;
+  if (name) updateFields.username = name;
   if (email) updateFields.email = email;
   if (password) updateFields.password = password;
 
-  const result = await db.collection('users').findOneAndUpdate(
-    { _id: new ObjectId(id) },
+  const result = await db.collection('users').updateOne(
+    { userId: Number(userId) },
     { $set: updateFields },
     { returnDocument: 'after' }
   );
-  return result.value;
+  return result.matchedCount>0;
 };
 
 // DELETE
-const remove = async (id) => {
-  const result = await db.collection('users').findOneAndDelete({ _id: new ObjectId(id) });
-  return result.value;
+const remove = async (userId) => {
+  const result = await db.collection('users').deleteOne({ userId: Number(userId) });
+  return result.deletedCount>0;
 };
 
 module.exports = {

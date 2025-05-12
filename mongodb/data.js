@@ -74,23 +74,6 @@ for (let k = 0; k < 500; k++) {
 
 
 
-db = db.getSiblingDB('socialnet');
-let posts1 = db.posts.find({ userId: 2 });
-print('Posts of user 2:', JSON.stringify(posts1.toArray(), null, 2));
-print(posts1.explain('executionStats').executionStats.executionStages.shards);
-
-db = db.getSiblingDB('socialnet');
-let posts2 = db.posts.find({ userId: 4000 });
-print('Posts of user 4000:', JSON.stringify(posts2.toArray(), null, 2));
-print(posts2.explain('executionStats').executionStats.executionStages.shards);
-
-db = db.getSiblingDB('socialnet');
-let comments = db.comments.find({ userId: 123 });
-print('Comentarios hechos por el usuario 123:');
-printjson(comments.toArray());
-print(comments.explain('executionStats').executionStats.executionStages.shards);
-
-
 
 
 
