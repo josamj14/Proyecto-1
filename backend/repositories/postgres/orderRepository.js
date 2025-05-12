@@ -1,4 +1,4 @@
-const pool = require('../../db/mongoClient');
+const pool = require('../../db/pgClient');
 
 // Crear un pedido
 const createOrderService = async (userId, datetime, restaurantId) => {

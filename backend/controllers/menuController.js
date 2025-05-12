@@ -1,12 +1,6 @@
 const { getRepository } = require("../repositories/respositoryFactory");
-//const { getRepository } = require("../repositories/postgres/menuRepository");
-
-
-console.log("🔍 Repositorio cargado:", menuRepo);
-
 
 const { client: redisClient, getPrefixedKey } = require("../db/redisClient");
-
 
   // Respuesta estandarizada
   const handleResponse = (res, status, message, data = null) => {

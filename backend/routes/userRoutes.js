@@ -7,7 +7,7 @@ const {
     updateUser,
 } = require("../controllers/userController.js");
 
-const cacheMiddleware = require('../middlewares/cacheMiddleware');
+const cacheMiddleware = require('../middleware/cacheMiddleware.js');
 
 // Rutas CRUD para usuarios
 router.get("/user", cacheMiddleware(() => "all_users"), getAllUsers);             // Obtener todos los usuarios

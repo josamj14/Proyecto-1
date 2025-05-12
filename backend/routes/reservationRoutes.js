@@ -7,7 +7,7 @@ const {
   deleteReservation,
 } = require('../controllers/reservationController.js');
 
-const cacheMiddleware = require('../middlewares/cacheMiddleware');
+const cacheMiddleware = require('../middleware/cacheMiddleware.js');
 
 // Rutas CRUD para reservas
 router.get('/reservations', cacheMiddleware(() => "all_reservations"), getAllReservations);             // Obtener todas las reservas

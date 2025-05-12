@@ -7,7 +7,7 @@ const {
   deleteRestaurant,
 } = require('../controllers/restaurantController.js');
 
-const cacheMiddleware = require('../middlewares/cacheMiddleware');
+const cacheMiddleware = require('../middleware/cacheMiddleware.js');
 
 // Rutas CRUD para restaurantes
 router.get('/restaurant', cacheMiddleware(() => "all_restaurants"), getAllRestaurants);             // Obtener todos los restaurantes

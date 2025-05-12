@@ -1,4 +1,4 @@
-const pool = require('../../db/mongoClient');
+const pool = require('../../db/pgClient');
 
 //CREATE
 const createUserService = async (role, name, email, password) => {
