@@ -2,10 +2,10 @@
 services:
   db:
     container_name: postgres
+    image: josianamj/postgres_db:latest
     build: 
         context: ./postgres2 
-        dockerfile: Dockerfile 
-    image: postgres_db
+        dockerfile: Dockerfile
     restart: always
     environment:
        POSTGRES_USER: postgres
@@ -27,7 +27,7 @@ services:
     build: 
         context: ./backend 
         dockerfile: Dockerfile  
-    image: backend_image
+    image: josianamj/backend_image:latest
     depends_on:
       db:
         condition: service_healthy
@@ -47,7 +47,7 @@ services:
     build:
       context: ./redis
       dockerfile: Dockerfile
-    image: redis:latest
+    image: josianamj/redis_image:latest
     ports:
       - "6379:6379"
     expose:
@@ -260,7 +260,7 @@ services:
       - mongo-replica-sharding
 
   setup-mongo:
-    image: "setup-mongo"
+    image: josianamj/setup_mongo:latest
     build: ./mongodb
     depends_on:
       - "mongos1"

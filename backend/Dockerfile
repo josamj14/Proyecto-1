@@ -14,6 +14,8 @@ RUN npm install ---save-dev nodemon
 RUN npm install jest
 RUN npm install mongodb
 RUN npm install redis
+RUN npm install supertest
+
 # Copiar el resto de los archivos del proyecto
 COPY . .
 
