@@ -11,4 +11,5 @@ COPY data.js .
 
 COPY setup.sh .
 
+RUN chmod +x /usr/src/configs/setup.sh
 CMD ["./setup.sh"]
