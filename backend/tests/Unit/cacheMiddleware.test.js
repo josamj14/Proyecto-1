@@ -1,13 +1,13 @@
 
-jest.mock('../db/redisClient', () => ({
+jest.mock('../../db/redisClient', () => ({
   client: {
     get: jest.fn(),
   },
   getPrefixedKey: jest.fn(),
 }));
 
-const cacheMiddleware = require('../middleware/cacheMiddleware');
-const { client: redisClient, getPrefixedKey } = require('../db/redisClient');
+const cacheMiddleware = require('../../middleware/cacheMiddleware');
+const { client: redisClient, getPrefixedKey } = require('../../db/redisClient');
 
 
 beforeAll(() => {

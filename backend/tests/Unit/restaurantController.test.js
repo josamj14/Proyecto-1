@@ -1,5 +1,5 @@
 
-jest.mock('../db/redisClient', () => ({
+jest.mock('../../db/redisClient', () => ({
   client: {
     get: jest.fn(),
     set: jest.fn(),
@@ -14,12 +14,12 @@ const {
   getRestaurantById,
   updateRestaurant,
   deleteRestaurant,
-} = require('../controllers/restaurantController');
+} = require('../../controllers/restaurantController');
 
-const { getRepository } = require('../repositories/respositoryFactory');
-const { client: redisClient, getPrefixedKey } = require('../db/redisClient');
+const { getRepository } = require('../../repositories/respositoryFactory');
+const { client: redisClient, getPrefixedKey } = require('../../db/redisClient');
 
-jest.mock('../repositories/respositoryFactory');
+jest.mock('../../repositories/respositoryFactory');
 
 describe('restaurantController', () => {
   let res, next, restRepo;
