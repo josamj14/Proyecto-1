@@ -6,7 +6,7 @@ const restaurantRoutes = require('./routes/restaurantRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const menuRoutes = require('./routes/menuRoutes');
-const productRoutes = requiere('./routes/productRoutes')
+const productRoutes = require('./routes/productRoutes')
 const authRoutes = require('./routes/authRoutes');
 const checkJwt = require('./middleware/auth0');
 

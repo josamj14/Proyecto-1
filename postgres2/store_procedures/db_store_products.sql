@@ -1,6 +1,6 @@
 CREATE FUNCTION create_product(
     p_name VARCHAR,
-    p_descrip VARCHAR,
+    p_descrip TEXT,
     p_menu_id INT,
     p_price DECIMAL(10,2)
 ) RETURNS INT AS $$

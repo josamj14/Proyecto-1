@@ -5,6 +5,8 @@ En esta seccion detallamos la arquitectura de bases de datos híbrida que utiliz
 ### Configuracion
 Los controladores y modelos en el código se diseñaron con el patrón Repositorio para permitir el intercambio entre __PostgreSQL__ y __MongoDB__ mediante la variable de configuración _DB_TYPE_.
 
+Para la generación de datos de prueba realistas, se genera un contenedor temporal de nombre __Cargar_Datos__, el cual contiene scripts de _Node.js_ utilizando la librería _Faker_.
+
 ---
 
 ## 🐘 PostgreSQL
