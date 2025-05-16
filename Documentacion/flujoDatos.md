@@ -4,6 +4,8 @@ En esta sección, describimos cómo fluyen los datos desde que el cliente realiz
 
 En las rutas de los ejemplos, se reemplaza la finalizacion de una consulta específica por __*__ para generalizar.
 
+![Flujo Datos](./img/flujoDatos.png)
+
 ## Flujo de una consulta simple
 1. El __cliente__ hace petición a `http://localhost/api/*`
 2. __Traefik__ enruta hacia una instancia del __backend__.

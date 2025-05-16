@@ -4,6 +4,9 @@
 
 En nuestra arquitectura, generamos un contenedor con el servicio Traefik para implementar un balanceador de carga y proxy inverso que redirige el tráfico a los servicios correctos según la ruta utilizada en una consulta específica.  
 
+![Diagrama Traefik](./img/traefik.png)
+
+
 ### Configuración
 
 Decidimos utilizar __Traefik__ sobre otros servicios de balanceo de carga como Nginx o Kubernetes debido a su facilidad de configuración mediante _labels_ en el _docker_compose_ y el balanceo de carga automático.
