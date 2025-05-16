@@ -1,5 +1,22 @@
 
 services:
+
+  traefik:
+    image: traefik:v2.11
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - backend-network
+
   db:
     container_name: postgres
     image: josianamj/postgres_db:latest
@@ -23,7 +40,6 @@ services:
       - backend-network   # Agregado aquí AGREGUÉ UN NET PORQUE NO ME  LEVANTA EL POSTGRESS.
 
   backend:
-    container_name: backend
     build: 
         context: ./backend 
         dockerfile: Dockerfile  
@@ -33,12 +49,14 @@ services:
         condition: service_healthy
       setup-mongo:
         condition: service_completed_successfully
-        
-    ports:
-      - "3000:3000"
     networks:
       - mongo-replica-sharding
       - backend-network   # Agregado aquí EL  NET ATTE PIKI ME CAGO EN TODO :3 
+    labels: #veamos si hace routing este mae 
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.services.backend.loadbalancer.server.port=3000"
 
 #------------------------REDIS------------------------------------|
 #Levantando el servicio de redis en el compose.
