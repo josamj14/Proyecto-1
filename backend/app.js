@@ -6,14 +6,14 @@ const restaurantRoutes = require('./routes/restaurantRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const menuRoutes = require('./routes/menuRoutes');
+const productRoutes = requiere('./routes/productRoutes')
 const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes');
 const checkJwt = require('./middleware/auth0');
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -30,6 +30,7 @@ app.use('/api', reservationRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', menuRoutes);
 app.use('/api', productRoutes);
+//app.use   /search   searchRoutes
 
 // DB startup (PostgreSQL or MongoDB)
 (async () => {

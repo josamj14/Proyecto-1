@@ -1,10 +1,25 @@
 const router = require('express').Router();
-
 const {
-  createProduct
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct
 } = require('../controllers/productController.js');
 
-// Rutas CRUD para menús
-router.post('/product', createProduct); // Crear nuevo producto
+// 🔄 Crear nuevo producto
+router.post('/product', createProduct);
+
+// 🔍 Obtener todos los productos
+router.get('/products', getAllProducts);
+
+// 🔍 Obtener producto por ID
+router.get('/products/:id', getProductById);
+
+// 🔄 Actualizar un producto
+router.put('/products/:id', updateProduct);
+
+// 🗑️ Eliminar un producto
+router.delete('/products/:id', deleteProduct);
 
 module.exports = router;
