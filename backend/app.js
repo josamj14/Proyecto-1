@@ -7,6 +7,7 @@ const reservationRoutes = require('./routes/reservationRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 const authRoutes = require('./routes/authRoutes');
+const productRoutes = require('./routes/productRoutes');
 const checkJwt = require('./middleware/auth0');
 
 dotenv.config();
@@ -28,6 +29,7 @@ app.use('/api', restaurantRoutes);
 app.use('/api', reservationRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', menuRoutes);
+app.use('/api', productRoutes);
 
 // DB startup (PostgreSQL or MongoDB)
 (async () => {

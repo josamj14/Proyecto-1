@@ -8,7 +8,8 @@ function getRepository(entity) {
             order: require('./postgres/orderRepository'),
             menu: require('./postgres/menuRepository'),
             restaurant: require('./postgres/restaurantRepository'),
-            reservation: require('./postgres/reservationRepository')
+            reservation: require('./postgres/reservationRepository'),
+            product: require('./postgres/productRepository'),
         },
         mongo: {
             user: require('./mongo/userRepository'),
@@ -16,6 +17,7 @@ function getRepository(entity) {
             menu: require('./mongo/menuRepository'),
             restaurant: require('./mongo/restaurantRepository'),
             reservation: require('./mongo/reservationRepository'),
+            product: require('./mongo/productRepository')
         }
     };
 
