@@ -73,6 +73,21 @@ services:
     networks:
       - mongo-replica-sharding
 
+#-----------------ELASTIC--------------------------------------|
+#Levantando el servicio de elastic en el compose
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    environment:
+      - discovery.type=single-node
+      - network.host=0.0.0.0
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
+    networks:
+      - backend-network
+#------------------------------------------------------------------------|
 
   mongors1n1:
     container_name: mongors1n1
@@ -319,6 +334,7 @@ volumes:
   config1:
   config2:
   config3:
+  elastic-data:
 
 networks:
   mongo-replica-sharding:

@@ -83,7 +83,7 @@ module.exports = cacheMiddleware;
 
 ---
 
-## 🚀 **Integración en Controladores**
+##  **Integración en Controladores**
 A modo de ejemplo, vamos a integrar el caché en el controlador de menus.
 En el controlador de menús, el caché se implementa de la siguiente forma:
 Es en el controlador donde se manjea la política de expiración que en nuestro caso es 1 hora.
@@ -121,7 +121,7 @@ module.exports = {
 
 ---
 
-## ✅ **Resultado Esperado**
+##  **Resultado Esperado**
 - Primera consulta a `/api/menus` → **Cache Miss** y respuesta desde PostgreSQL/Mongo.
 - Segunda consulta → **Cache Hit** y respuesta desde Redis.
 - Clave almacenada en Redis: `postgres:all_menus`.
