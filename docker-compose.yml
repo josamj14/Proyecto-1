@@ -18,8 +18,8 @@ services:
       - backend-network
 
   db:
-    container_name: postgres
     image: josianamj/postgres_db:latest
+    container_name: postgres
     build: 
         context: ./postgres2 
         dockerfile: Dockerfile
@@ -284,7 +284,27 @@ services:
       - "mongos1"
     networks:
       - mongo-replica-sharding
-    
+
+  charge-data:
+    build: ./cargar_datos
+    dns:
+      - 8.8.8.8
+    depends_on:
+      db:
+        condition: service_healthy
+      setup-mongo:
+        condition: service_completed_successfully
+    environment:
+        DB_USER: postgres
+        DB_HOST: postgres
+        DB_PASSWORD: password
+        DB_NAME: RestaurantDB
+        DB_PORT: 5432
+        MONGO_DB: restaurant
+        MONGO_URI: mongodb://mongos1/?serverSelectionTimeoutMS=3000&directConnection=true
+    networks:
+      - mongo-replica-sharding
+      - backend-network 
 
 volumes:
   data1:

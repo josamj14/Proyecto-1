@@ -1,0 +1,14 @@
+{
+  "name": "charge-data",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "charge_data.js",
+  "scripts": {
+    "start": "node charge_data.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "pg": "^8.11.0",
+    "mongodb": "^6.3.0"
+  }
+}

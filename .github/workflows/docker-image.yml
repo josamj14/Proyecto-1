@@ -40,6 +40,7 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/backend_image:latest ./backend
         docker build -t ${{ secrets.DOCKER_USERNAME }}/redis_image:latest ./redis
         docker build -t ${{ secrets.DOCKER_USERNAME }}/setup_mongo:latest ./mongodb
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/charge-data:latest ./cargar_datos
 
     - name: Push all images to Docker Hub
       run: |
@@ -47,3 +48,4 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/backend_image:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/redis_image:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/setup_mongo:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/charge-data:latest
