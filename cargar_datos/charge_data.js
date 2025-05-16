@@ -28,7 +28,7 @@ async function run() {
   await pgClient.connect();
   const mongo = mongoClient.db(MONGO_DB);
 
-  console.log("🧹 Limpiando bases de datos...");
+  console.log("Limpiando bases de datos...");
   await pgClient.query(`TRUNCATE Order_Line, Reservation, "Order", "Table", Menu_Restaurant, Products, Menu, Restaurant, Users RESTART IDENTITY CASCADE`);
   await Promise.all([
     mongo.collection('users').deleteMany({}),
@@ -38,7 +38,7 @@ async function run() {
     mongo.collection('reservation').deleteMany({})
   ]);
 
-  console.log("📋 Insertando menús...");
+  console.log("Insertando menús...");
   const menuIds = {};
   for (const name of MENUS) {
     const res = await pgClient.query(`INSERT INTO Menu ("Name") VALUES ($1) RETURNING Menu_ID`, [name]);
@@ -46,7 +46,7 @@ async function run() {
     await mongo.collection('menu').insertOne({ name, products: [] });
   }
 
-  console.log("👤 Insertando usuarios...");
+  console.log("Insertando usuarios...");
   const userIds = [];
   for (let i = 0; i < NUM_USERS; i++) {
     const role = faker.helpers.arrayElement(['Client', 'Admin']);
@@ -62,7 +62,7 @@ async function run() {
     await mongo.collection('users').insertOne({ userId, role, username, email, password });
   }
 
-  console.log("🏢 Insertando restaurantes...");
+  console.log("Insertando restaurantes...");
   const restaurantIds = [];
   for (let i = 0; i < NUM_RESTAURANTS; i++) {
     const name = `Restaurante ${faker.location.city()}`;
@@ -94,7 +94,7 @@ async function run() {
     });
   }
 
-  console.log("🍔 Insertando productos...");
+  console.log("Insertando productos...");
   const productIds = [];
   const menus = await pgClient.query(`SELECT Menu_ID, "Name" FROM Menu`);
   for (const { menu_id, Name } of menus.rows) {
@@ -114,7 +114,7 @@ async function run() {
     }
   }
 
-  console.log("🧾 Insertando órdenes...");
+  console.log("Insertando órdenes...");
   for (let i = 0; i < NUM_ORDERS; i++) {
     const userId = faker.helpers.arrayElement(userIds);
     const restaurantId = faker.helpers.arrayElement(restaurantIds);
@@ -142,7 +142,7 @@ async function run() {
     });
   }
 
-  console.log("📅 Insertando reservas...");
+  console.log(" Insertando reservas...");
   for (let i = 0; i < NUM_RESERVATIONS; i++) {
     const userId = faker.helpers.arrayElement(userIds);
     const restaurantId = faker.helpers.arrayElement(restaurantIds);
@@ -172,5 +172,5 @@ async function run() {
 }
 
 run().catch(err => {
-  console.error("❌ Error:", err);
+  console.error("Error:", err);
 });
