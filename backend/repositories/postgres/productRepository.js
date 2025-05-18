@@ -1,10 +1,9 @@
 const pool = require('../../db/pgClient');
 
-// 🔄 Crear un nuevo producto
 const createProductService = async (name, description, menu_id, price) => {
   try {
     const result = await pool.query(
-      'SELECT create_product($1::VARCHAR, $2::TEXT, $3::INT, $4::DECIMAL) AS product_id',
+      'SELECT create_product($1::VARCHAR, $2::TEXT, $3::INT, $4::NUMERIC) AS product_id',
       [name, description, menu_id, price]
     );
 
@@ -16,7 +15,20 @@ const createProductService = async (name, description, menu_id, price) => {
   }
 };
 
-module.exports = {
-  create: createProductService
+
+// 🔍 Obtener todos los productos
+const getAllProductsService = async () => {
+  try {
+    const result = await pool.query('SELECT * FROM get_all_products()');
+    console.log("📌 Productos obtenidos de PostgreSQL:", result.rows);
+    return result.rows;
+  } catch (error) {
+    console.error("❌ Error al obtener los productos:", error.message);
+    throw error;
+  }
 };
 
+module.exports = {
+  create: createProductService,
+  findAll: getAllProductsService
+};
