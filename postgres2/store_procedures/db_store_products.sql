@@ -15,6 +15,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE FUNCTION get_all_products()
+RETURNS TABLE (
+    product_id INT,
+    name VARCHAR,
+    description TEXT,
+    menu_id INT,
+    price DECIMAL(10,2)
+) AS $$
+BEGIN
+    RETURN QUERY 
+    SELECT 
+        p.Product_ID AS product_id, 
+        p."Name" AS name, 
+        p."Description" AS description, 
+        p.Menu_ID AS menu_id, 
+        p.Price AS price
+    FROM 
+        Products p;
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- CREATE FUNCTION create_product(
 --     p_name VARCHAR,

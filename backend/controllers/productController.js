@@ -8,9 +8,7 @@ const handleResponse = (res, status, message, data = null) => {
   });
 };
 
-
-
-// 🔄 Crear un nuevo producto CONTROLLER
+//  Crear un nuevo producto CONTROLLER
 const createProduct = async (req, res, next) => {
   const { name, description, menu_id, price } = req.body;
 
@@ -29,7 +27,7 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-// 🔍 Obtener todos los productos
+//  Obtener todos los productos
 // const getAllProducts = async (req, res, next) => {
 //   try {
 //     const products = await productRepo.findAll();
@@ -45,7 +43,20 @@ const createProduct = async (req, res, next) => {
 //   }
 // };
 
-module.exports = {
-  createProduct
-  //getAllProducts
+const getAllProducts = async (req, res, next) => {
+  try {
+    const productRepo = getRepository("product");
+    const products = await productRepo.findAll();
+    handleResponse(res, 200, "Products fetched successfully", products);
+  } catch (err) {
+    console.error("❌ Error al obtener productos:", err.message);
+    next(err);
+  }
 };
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+};
+
+
