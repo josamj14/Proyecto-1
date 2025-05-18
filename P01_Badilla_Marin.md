@@ -4,6 +4,11 @@ __Periodo:__ I Sem 2025
 __Estudiantes:__ Brandon Badilla y Josi Marin  
 __Fecha de entrega:__ 17 de mayo del 2025  
 
+## Video
+https://youtu.be/_1SNJjjM_tg 
+
+## GitHub
+
 
 ## Contenidos
 
