@@ -1,4 +1,6 @@
 const { getRepository } = require("../repositories/respositoryFactory");
+//const createProductIndex = require("../db/createElasticIndex");
+//const elasticClient = require("../db/elasticClient");
 
 const handleResponse = (res, status, message, data = null) => {
   res.status(status).json({
@@ -8,7 +10,7 @@ const handleResponse = (res, status, message, data = null) => {
   });
 };
 
-//  Crear un nuevo producto CONTROLLER
+// **Crear un nuevo producto y enviar a Elasticsearch**
 const createProduct = async (req, res, next) => {
   const { name, description, menu_id, price } = req.body;
 
@@ -20,36 +22,43 @@ const createProduct = async (req, res, next) => {
       return handleResponse(res, 400, "No se pudo crear el producto");
     }
 
-    handleResponse(res, 201, "Product created successfully", { product_id: newProductId });
+    // // 🔍 **Verificación de Headers:**
+    // const headers = req.headers;
+    // if (!headers['content-type'] || !headers['accept']) {
+    //   headers['Content-Type'] = 'application/vnd.elasticsearch+json; compatible-with=8';
+    //   headers['Accept'] = 'application/vnd.elasticsearch+json; compatible-with=8';
+    // }
+
+    // // **Enviar a Elasticsearch**
+    // await elasticClient.index({
+    //   index: 'products',
+    //   document: {
+    //     name,
+    //     description,
+    //     menu_id,
+    //     price,
+    //   },
+    //   headers: headers,
+    // });
+
+    // console.log(" Producto creado e indexado en Elasticsearch");
+
+    // handleResponse(res, 201, "Product created and indexed successfully", { product_id: newProductId });
+
   } catch (err) {
-    console.error("❌ Error al crear producto:", err.message);
+    console.error("Error al crear producto ", err.message);
     next(err);
   }
 };
 
-//  Obtener todos los productos
-// const getAllProducts = async (req, res, next) => {
-//   try {
-//     const products = await productRepo.findAll();
-    
-//     if (!products.length) {
-//       return handleResponse(res, 404, "No products found");
-//     }
-    
-//     handleResponse(res, 200, "Products fetched successfully", products);
-//   } catch (err) {
-//     console.error("❌ Error al obtener productos:", err.message);
-//     next(err);
-//   }
-// };
-
+// ✅ **Obtener todos los productos**
 const getAllProducts = async (req, res, next) => {
   try {
     const productRepo = getRepository("product");
     const products = await productRepo.findAll();
     handleResponse(res, 200, "Products fetched successfully", products);
   } catch (err) {
-    console.error("❌ Error al obtener productos:", err.message);
+    console.error("Error al obtener productos:", err.message);
     next(err);
   }
 };
@@ -58,5 +67,3 @@ module.exports = {
   createProduct,
   getAllProducts,
 };
-
-

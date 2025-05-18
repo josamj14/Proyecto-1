@@ -1,5 +1,5 @@
 # Usar la imagen oficial de Node.js
-FROM node:16
+FROM node:18
 
 # Crear y establecer el directorio de trabajo
 WORKDIR /app
@@ -15,6 +15,8 @@ RUN npm install jest
 RUN npm install mongodb
 RUN npm install redis
 RUN npm install supertest
+RUN npm install @elastic/elasticsearch
+
 
 # Copiar el resto de los archivos del proyecto
 COPY . .

@@ -9,6 +9,7 @@ const menuRoutes = require('./routes/menuRoutes');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const checkJwt = require('./middleware/auth0');
+const createProductIndex = require('./db/createElasticIndex');
 
 dotenv.config();
 
@@ -23,6 +24,12 @@ app.use(express.json());
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 
+
+// 🚀 Crear el índice de productos al iniciar
+(async () => {
+  await createProductIndex();
+})();
+console.log("Este log esta despues del create index");
 // app.use('/api', checkJwt); // Si quieres proteger el resto
 
 app.use('/api', restaurantRoutes);
