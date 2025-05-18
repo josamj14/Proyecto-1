@@ -14,3 +14,24 @@ BEGIN
     RETURN new_product_ID;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_all_products()
+RETURNS TABLE (
+    Product_ID INT,
+    Name VARCHAR,
+    Description TEXT,
+    Menu_ID INT,
+    Price DECIMAL
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p.Product_ID,
+        p."Name",
+        p."Description",
+        p.Menu_ID,
+        p.Price
+    FROM Products p;
+END;
+$$ LANGUAGE plpgsql;
+

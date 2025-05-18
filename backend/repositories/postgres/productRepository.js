@@ -5,6 +5,16 @@ const createProductService = async (name, descrip, menu_id, price) => {
   return result.rows[0];
 };
 
+const getAllProductsService = async () => {
+  try {
+    const result = await pool.query('SELECT * FROM get_all_products()');
+    return result.rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
-  create: createProductService
+  create: createProductService,
+  findAll: getAllProductsService,
 };

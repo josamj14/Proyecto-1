@@ -19,6 +19,18 @@ const { getRepository } = require("../repositories/respositoryFactory");
     }
   };
 
+const getAllProducts = async (req, res, next) => {
+  try {
+    const productRepo = getRepository("product");
+    const products = await productRepo.findAll();
+    handleResponse(res, 200, "Products fetched successfully", products);
+  } catch (err) {
+    console.error("Error al obtener productos:", err.message);
+    next(err);
+  }
+};
+
   module.exports = {
-    createProduct
+    createProduct,
+    getAllProducts
 };
