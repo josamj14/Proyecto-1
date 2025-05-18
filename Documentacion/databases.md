@@ -11,6 +11,8 @@ Los controladores y modelos en el código se diseñaron con el patrón Repositor
 
 Esta es la base de datos principal, generada previamente en el Trabajo Corto #1. 
 
+![Postgres](./img/postgres.png)
+
 ---
 
 ## 🍃 MongoDB con Replicación y Sharding

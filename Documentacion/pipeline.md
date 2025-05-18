@@ -12,6 +12,10 @@ La configuracion del pipeline CI/CD se realizo por medio del archivo __.github\w
 2. **Ejecución de pruebas (unitarias/integración):** las pruebas se ejecutan por medio del comando `npm test`. Con solo una prueba que esté incorrecta, se interrupte el flujo del pipeline y da un símbolo de error en GitHub.
 3. **Construir y subir las imágenes Docker:** se inicia sesion en la cuenta _josianamj_ de Docker para subir las imagenes creadas para este proyecto, con la funcion de que estas puedan ser accedidas desde multiples maquinas sin necesidad de construccion. 
 
+Si el pipeline completo se ejecuta de manera correcta, en el repositorio aparece un ✅, al hacerle click podemos ver un mensaje de éxito.
+
+![Pipelinr](./img/pipeline-success.png)
+
 ### Posterior al pipeline
 Como indicado en el enunciado, el despliegue del sistema se realiza de forma local. Para esto, es necesario seguir los siguientes pasos:
 
@@ -23,6 +27,7 @@ docker pull josianamj/postgres_db:latest
 docker pull josianamj/backend_image:latest
 docker pull josianamj/redis_image:latest
 docker pull josianamj/setup_mongo:latest
+docker pull josianamj/charge-data:latest
 ```
 
 2. __Levantar los contenedores__

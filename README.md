@@ -17,8 +17,6 @@ __Fecha de entrega:__ 17 de mayo del 2025
   - [Bases de datos simultáneas](./Documentacion/databases.md)
   - [Balanceador de carga/router](./Documentacion/balanceadorCarga.md)
   - [Pipeline CI/CD](./Documentacion/pipeline.md)
-  - [Pruebas](./Documentacion/pruebas.md)
-  - [Autenticacion](./Documentacion/autenticacion.md)
 
 
 
@@ -54,9 +52,9 @@ docker-compose up -d
 
 ⚠️ __Importante:__ Al ejecutar este comando, el servicio toma un tiempo en levantarse completamente. No realizar consultas hasta que el comando "termine" su ejecucion pues resultara en errores. 
 
-Si desea realizar escalado vertical de los microservicios, puede agregar el argumento `--scale service_name=quantity` al comando previo, por ejemplo, levantar 3 instancias de la API y 2 instancias del servicio de busqueda se veria de la siguiente forma:
+Si desea realizar escalado vertical de los microservicios, puede agregar el argumento `--scale service_name=quantity` al comando previo, por ejemplo, levantar 3 instancias de la API se veria de la siguiente forma:
 ```powershell
-docker compose up -d --scale backend=3 --scale elastic=2
+docker compose up -d --scale backend=3 
 ```
 
 3. __Bajar los contenedores:__ Al finalizar las pruebas, puede "bajar" (detener la ejecucion y eliminar) los contenedores por medio del siguiente comando:
