@@ -16,19 +16,19 @@ const createProductService = async (name, description, menu_id, price) => {
 };
 
 
-// 🔍 Obtener todos los productos
-const getAllProductsService = async () => {
-  try {
-    const result = await pool.query('SELECT * FROM get_all_products()');
-    console.log("📌 Productos obtenidos de PostgreSQL:", result.rows);
-    return result.rows;
-  } catch (error) {
-    console.error("❌ Error al obtener los productos:", error.message);
-    throw error;
-  }
-};
+// // 🔍 Obtener todos los productos
+// const getAllProductsService = async () => {
+//   try {
+//     const result = await pool.query('SELECT * FROM get_all_products()');
+//     console.log("📌 Productos obtenidos de PostgreSQL:", result.rows);
+//     return result.rows;
+//   } catch (error) {
+//     console.error("❌ Error al obtener los productos:", error.message);
+//     throw error;
+//   }
+// };
 
 module.exports = {
-  create: createProductService,
-  findAll: getAllProductsService
+  create: createProductService
+  //findAll: getAllProductsService
 };

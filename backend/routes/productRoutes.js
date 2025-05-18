@@ -8,7 +8,7 @@ const {
 router.post('/product', createProduct);
 
 // Obtener todos los productos
-router.get('/products', getAllProducts);
+//router.get('/products', getAllProducts);
 
 
 

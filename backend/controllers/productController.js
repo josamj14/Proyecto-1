@@ -30,22 +30,22 @@ const createProduct = async (req, res, next) => {
 };
 
 // 🔍 Obtener todos los productos
-const getAllProducts = async (req, res, next) => {
-  try {
-    const products = await productRepo.findAll();
+// const getAllProducts = async (req, res, next) => {
+//   try {
+//     const products = await productRepo.findAll();
     
-    if (!products.length) {
-      return handleResponse(res, 404, "No products found");
-    }
+//     if (!products.length) {
+//       return handleResponse(res, 404, "No products found");
+//     }
     
-    handleResponse(res, 200, "Products fetched successfully", products);
-  } catch (err) {
-    console.error("❌ Error al obtener productos:", err.message);
-    next(err);
-  }
-};
+//     handleResponse(res, 200, "Products fetched successfully", products);
+//   } catch (err) {
+//     console.error("❌ Error al obtener productos:", err.message);
+//     next(err);
+//   }
+// };
 
 module.exports = {
-  createProduct,
-  getAllProducts
+  createProduct
+  //getAllProducts
 };
