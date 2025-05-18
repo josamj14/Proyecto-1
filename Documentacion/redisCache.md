@@ -3,7 +3,6 @@
 ## **Descripción General**
 La integración de Redis en nuestra API REST permite optimizar el rendimiento de las consultas a la base de datos PostgreSQL o Mongo. Mediante el uso de un middleware de caché, las respuestas frecuentes se almacenan temporalmente en Redis, reduciendo el tiempo de respuesta en futuras solicitudes.
 
-INSERTAR DIAGRAMA ESTRCUTURAL CUANDO LO TERMINE
 
 ## **Infraestructura en Docker Compose**
 La configuración para Redis se define en el archivo `docker-compose.yml`, el cual especifica un contenedor dedicado para Redis:

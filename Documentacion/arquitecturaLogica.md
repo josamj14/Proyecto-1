@@ -4,7 +4,8 @@ En esta sección, describimos como están organizados los contenedores a nivel f
 
 ## Diagrama
 
-![Diagrama Lógico](./arquitecturaLogica.png)
+![Logs de backend](./img/Infraestructura.png)
+
 
 ## Componentes
 

@@ -22,7 +22,7 @@ const createProduct = async (req, res, next) => {
       return handleResponse(res, 400, "No se pudo crear el producto");
     }
 
-    // // 🔍 **Verificación de Headers:**
+    // //  **Verificación de Headers:**
     // const headers = req.headers;
     // if (!headers['content-type'] || !headers['accept']) {
     //   headers['Content-Type'] = 'application/vnd.elasticsearch+json; compatible-with=8';
@@ -51,7 +51,7 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-// ✅ **Obtener todos los productos**
+// **Obtener todos los productos**
 const getAllProducts = async (req, res, next) => {
   try {
     const productRepo = getRepository("product");

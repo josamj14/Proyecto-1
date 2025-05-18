@@ -35,4 +35,11 @@ Se parte de código brindado por el docente, al cuál se le agrega un shard y r�
 - `mongos1` → Enrutador del clúster
 
 
+## Redis como Caché Distribuido
+Para optimizar el rendimiento en las consultas, se integra Redis como sistema de caché distribuido. La arquitectura se diseñó para que las peticiones GET a las siguientes rutas se consulten primero en Redis antes de acceder a la base de datos:
 
+Menús `(/menus, /menus/:id)`
+Órdenes `(/orders, /orders/:id)`
+Reservaciones `(/reservations, /reservations/:id)`
+Restaurantes `(/restaurant, /restaurant/:id)`
+Usuarios `(/user, /user/:id)`
