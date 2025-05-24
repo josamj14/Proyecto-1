@@ -38,7 +38,7 @@ app.use('/api', productRoutes);
     const pool = require('./db/pgClient'); // asegúrate que sea el archivo correcto
     try {
       await pool.connect(); // solo necesario para PostgreSQL
-      console.log(' Connected to PostgreSQL');
+      console.log('Connected to database -> PostgreSQL');
     } catch (err) {
       console.error(' PostgreSQL connection failed:', err);
     }
@@ -46,7 +46,7 @@ app.use('/api', productRoutes);
     const connectMongo = require('./db/mongoClient');
     try {
       await connectMongo(); // MongoClient se conecta al invocarlo
-      console.log(' Connected to MongoDB');
+      console.log(' Connected to database -> MongoDB');
     } catch (err) {
       console.error('MongoDB connection failed:', err);
     }
@@ -63,5 +63,5 @@ app.get('/', (req, res) => {
 
 // Server Running
 app.listen(port, () => {
-  console.log(` Server is running on http://localhost:${port}`);
+  console.log(`Backend server is running on http://localhost:${port}`);
 });

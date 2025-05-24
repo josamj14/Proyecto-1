@@ -13,7 +13,7 @@ const pool = new Pool({
 });
 
 pool.on("connect", () => {
-  console.log("Connection pool establised with Database");
+  console.log("Conectado a Postgres exitosamente");
 });
 
 module.exports = pool; 

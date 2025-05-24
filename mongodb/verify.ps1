@@ -7,7 +7,7 @@ db = db.getSiblingDB('restaurant');
 db.users.getShardDistribution();
 "@
 
-Start-Sleep -Seconds 20
+Start-Sleep -Seconds 5
 
 docker exec -it mongos1 mongosh --eval @"
 db = db.getSiblingDB('restaurant');
@@ -15,7 +15,7 @@ db = db.getSiblingDB('restaurant');
 db.menu.getShardDistribution();
 "@
 
-Start-Sleep -Seconds 20
+Start-Sleep -Seconds 5
 
 docker exec -it mongos1 mongosh --eval @"
 db = db.getSiblingDB('restaurant');
@@ -23,7 +23,7 @@ db = db.getSiblingDB('restaurant');
 db.restaurant.getShardDistribution();
 "@
 
-Start-Sleep -Seconds 20
+Start-Sleep -Seconds 5
 
 docker exec -it mongos1 mongosh --eval @"
 db = db.getSiblingDB('restaurant');
@@ -31,7 +31,7 @@ db = db.getSiblingDB('restaurant');
 db.order.getShardDistribution();
 "@
 
-Start-Sleep -Seconds 20
+Start-Sleep -Seconds 5
 
 docker exec -it mongos1 mongosh --eval @"
 db = db.getSiblingDB('restaurant');

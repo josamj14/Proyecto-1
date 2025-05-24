@@ -8,7 +8,7 @@ const cacheMiddleware = (keyGenerator) => async (req, res, next) => {
     const cachedData = await redisClient.get(cacheKey);
 
     if (cachedData) {
-      console.log("Cache hit");
+      console.log("Cache hit, datos traídos del caché");
       return res.status(200).json({
         status: 200,
         message: "Data fetched from cache",
@@ -17,7 +17,7 @@ const cacheMiddleware = (keyGenerator) => async (req, res, next) => {
     }
 
     // Si no está en caché, seguimos al controlador
-    console.log("Cache miss");
+    console.log("Cache miss, no hay consulta previa en caché");
     next();
   } catch (err) {
     console.error("Error al acceder al caché:", err);

@@ -15,11 +15,12 @@ const POSTGRES = {
 const MONGO_URL = process.env.MONGO_URI;
 const MONGO_DB = process.env.MONGO_DB;
 
-const NUM_USERS = 50;
-const NUM_RESTAURANTS = 20;
-const NUM_ORDERS = 50;
-const NUM_RESERVATIONS = 50;
-const MENUS = ['Regular Menu', 'Executive Menu', 'Dessert Menu', 'Breakfast Menu'];
+const NUM_USERS = 500;
+const NUM_RESTAURANTS = 500;
+const NUM_ORDERS = 500;
+const NUM_RESERVATIONS = 500;
+const MENUS = ['Kids Menu', 'Lunch Menu', 'Dinner Menu', 'Happy Hour Menu', 'Seasonal Menu', 'Chefs Special Menu', 'Tasting Menu', 'Drinks Menu', 'Cocktail Menu', 'Wine Menu', 'Beer Menu', 'Vegan Menu', 'Vegetarian Menu', 'Gluten-Free Menu', 'Allergen-Free Menu', 'Low-Carb Menu', 'Low-Calorie Menu', 'High-Protein Menu', 'Keto Menu', 'Paleo Menu', 'Holiday Menu', 'Thanksgiving Menu', 'Christmas Menu', 'New Year Menu', 'Easter Menu', 'Valentine’s Menu', 'Mother’s Day Menu', 'Father’s Day Menu', 'Fourth of July Menu', 'Weekend Brunch Menu', 'Midweek Special Menu', 'Late Night Menu', 'Afternoon Tea Menu', 'Buffet Menu', 'À la Carte Menu', 'Prix Fixe Menu', 'Set Menu', 'Mini Menu', 'Snack Menu', 'Bistro Menu', 'Grill Menu', 'Barbecue Menu', 'Seafood Menu', 'Steakhouse Menu', 'Italian Menu', 'Mexican Menu', 'Chinese Menu', 'Japanese Menu', 'Thai Menu', 'Indian Menu', 'French Menu', 'Greek Menu', 'Mediterranean Menu', 'American Menu', 'Fusion Menu', 'Rustic Menu', 'Gourmet Menu', 'Fine Dining Menu', 'Casual Dining Menu', 'Family Menu', 'Express Menu', 'Takeout Menu', 'Delivery Menu', 'Drive-Thru Menu', 'Pickup Menu', 'Online Order Menu', 'Mobile Order Menu', 'Special Events Menu', 'Birthday Menu', 'Anniversary Menu', 'Corporate Menu', 'Catering Menu', 'Banquet Menu', 'Outdoor Menu', 'Patio Menu', 'Poolside Menu', 'Room Service Menu', 'Hotel Menu', 'Spa Menu', 'Wellness Menu', 'Detox Menu', 'Smoothie Menu', 'Juice Menu', 'Coffee Menu', 'Tea Menu', 'Bakery Menu', 'Pastry Menu', 'Ice Cream Menu', 'Sundae Menu', 'Frozen Dessert Menu', 'Comfort Food Menu', 'Street Food Menu', 'Tapas Menu', 'Appetizer Menu', 'Soup Menu', 'Salad Menu', 'Sandwich Menu', 'Pizza Menu', 'Pasta Menu', 'Noodle Menu', 'Rice Menu', 'Grain Bowl Menu', 'Sushi Menu', 'Dim Sum Menu'];
+
 
 const pgClient = new Client(POSTGRES);
 const mongoClient = new MongoClient(MONGO_URL);

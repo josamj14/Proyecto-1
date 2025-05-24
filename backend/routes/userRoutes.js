@@ -5,6 +5,7 @@ const {
     getAllUsers,
     getUserById,
     updateUser,
+    loginUser
 } = require("../controllers/userController.js");
 
 const cacheMiddleware = require('../middleware/cacheMiddleware.js');
@@ -15,5 +16,6 @@ router.get("/user/:id", cacheMiddleware((req) => `user:${req.params.id}`), getUs
 router.post("/user", createUser);               // Crear nuevo usuario
 router.put("/user/:id", updateUser);            // Actualizar usuario
 router.delete("/user/:id", deleteUser);         // Eliminar usuario
+router.delete("/login", loginUser);         // Eliminar usuario
 
 module.exports = router;

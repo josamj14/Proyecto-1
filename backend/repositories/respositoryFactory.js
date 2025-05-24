@@ -23,7 +23,7 @@ function getRepository(entity) {
 
     const repo = repositories[dbType][entity];
 
-    console.log("Repositorio encontrado:", repo); // Verificar si encontró el repositorio
+    console.log(`Se realizara la consulta para la entidad ${entity} en ${dbType}`); // Verificar si encontró el repositorio
     if (!repo) {
         console.error(` No se encontró el repositorio para la entidad ${entity} en ${dbType}`);
     }
