@@ -47,10 +47,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      setup-mongo:
-        condition: service_completed_successfully
     networks:
-      - mongo-replica-sharding
       - backend-network   # Agregado aquí EL  NET ATTE PIKI ME CAGO EN TODO :3 
     labels: #veamos si hace routing este mae 
       - "traefik.enable=true"
@@ -71,7 +68,7 @@ services:
     expose:
       - "6379"
     networks:
-      - mongo-replica-sharding
+      - backend-network
 
 #-----------------ELASTIC--------------------------------------|
 #Levantando el servicio de elastic en el compose
@@ -88,218 +85,6 @@ services:
     networks:
       - backend-network
 #------------------------------------------------------------------------|
-
-  mongors1n1:
-    container_name: mongors1n1
-    image: mongo
-    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
-    ports:
-      - 27017:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data1:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongors1n2:
-    container_name: mongors1n2
-    image: mongo
-    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
-    ports:
-      - 27027:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data2:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongors1n3:
-    container_name: mongors1n3
-    image: mongo
-    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
-    ports:
-      - 27037:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data3:/data/db
-    networks:
-      - mongo-replica-sharding
-
-
-  mongors2n1:
-    container_name: mongors2n1
-    image: mongo
-    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
-    ports:
-      - 27047:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data4:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongors2n2:
-    container_name: mongors2n2
-    image: mongo
-    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
-    ports:
-      - 27057:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data5:/data/db
-    networks:
-      - mongo-replica-sharding
-      
-  mongors2n3:
-    container_name: mongors2n3
-    image: mongo
-    command: mongod --shardsvr --replSet mongors2 --dbpath /data/db --port 27017
-    ports:
-      - 27067:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data6:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongors3n1:
-    container_name: mongors3n1
-    image: mongo
-    command: mongod --shardsvr --replSet mongors3 --dbpath /data/db --port 27017
-    ports:
-      - 27077:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data7:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongors3n2:
-    container_name: mongors3n2
-    image: mongo
-    command: mongod --shardsvr --replSet mongors3 --dbpath /data/db --port 27017
-    ports:
-      - 27087:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data8:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongors3n3:
-    container_name: mongors3n3
-    image: mongo
-    command: mongod --shardsvr --replSet mongors3 --dbpath /data/db --port 27017
-    ports:
-      - 27097:27017
-    expose:
-      - "27017"
-    environment:
-      TERM: xterm
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - data9:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongocfg1:
-    container_name: mongocfg1
-    image: mongo
-    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
-    environment:
-      TERM: xterm
-    expose:
-      - "27017"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - config1:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongocfg2:
-    container_name: mongocfg2
-    image: mongo
-    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
-    environment:
-      TERM: xterm
-    expose:
-      - "27017"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - config2:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongocfg3:
-    container_name: mongocfg3
-    image: mongo
-    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
-    environment:
-      TERM: xterm
-    expose:
-      - "27017"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - config3:/data/db
-    networks:
-      - mongo-replica-sharding
-
-  mongos1:
-    container_name: mongos1
-    image: mongo
-    depends_on:
-      - mongocfg1
-      - mongocfg2
-    command: mongos --configdb mongors1conf/mongocfg1:27017,mongocfg2:27017,mongocfg3:27017 --port 27017 --bind_ip_all
-    ports:
-      - 27019:27017
-    expose:
-      - "27017"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - mongo-replica-sharding
-
-  setup-mongo:
-    image: josianamj/setup_mongo:latest
-    build: ./mongodb
-    depends_on:
-      - "mongos1"
-    networks:
-      - mongo-replica-sharding
-
   charge-data:
     build: ./cargar_datos
     dns:
@@ -307,20 +92,109 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      setup-mongo:
-        condition: service_completed_successfully
     environment:
         DB_USER: postgres
         DB_HOST: postgres
         DB_PASSWORD: password
         DB_NAME: RestaurantDB
         DB_PORT: 5432
-        MONGO_DB: restaurant
-        MONGO_URI: mongodb://mongos1/?serverSelectionTimeoutMS=3000&directConnection=true
     networks:
-      - mongo-replica-sharding
       - backend-network 
 
+#----------------------------------------------------------------------|
+#------------------------PROYECTO 2------------------------------------|
+#----------------------------------------------------------------------|
+
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hive/hadoop-hive.env
+    ports:
+      - "50070:50070"
+  
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - datanode:/hadoop/dfs/data
+    env_file:
+      - ./hive/hadoop-hive.env
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070"
+    ports:
+      - "50075:50075"
+  
+  hive-server:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    env_file:
+      - ./hive/hadoop-hive.env
+    environment:
+      HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+    ports:
+      - "10000:10000"
+  
+  hive-metastore:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    env_file:
+      - ./hive/hadoop-hive.env
+    command: /opt/hive/bin/hive --service metastore
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
+    ports:
+      - "9083:9083"
+
+  
+  hive-metastore-postgresql:
+    image: bde2020/hive-metastore-postgresql:2.3.0
+  
+  presto-coordinator:
+    image: shawnzhu/prestodb:0.181
+    ports:
+      - "8081:8081"
+      
+  airflow-webserver:
+    image: apache/airflow:2.9.1
+    container_name: airflow-webserver
+    command: webserver
+    ports:
+      - "8082:8080"  # http://localhost:8082
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/airflow/scripts
+      - ./airflow_db:/opt/airflow
+    depends_on:
+      - airflow-init
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.1
+    container_name: airflow-scheduler
+    command: scheduler
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./airflow_db:/opt/airflow
+    depends_on:
+      - airflow-init
+
+  airflow-init:
+    image: apache/airflow:2.9.1
+    container_name: airflow-init
+    command: bash -c "airflow db init"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./airflow_db:/opt/airflow
+
+  
 volumes:
   data1:
   data2:
@@ -335,6 +209,8 @@ volumes:
   config2:
   config3:
   elastic-data:
+  namenode:
+  datanode:
 
 networks:
   mongo-replica-sharding:

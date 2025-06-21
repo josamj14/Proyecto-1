@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import pkg from 'pg';
-import { MongoClient } from 'mongodb';
 
 const { Client } = pkg;
 
@@ -12,9 +11,6 @@ const POSTGRES = {
   port: process.env.DB_PORT
 };
 
-const MONGO_URL = process.env.MONGO_URI;
-const MONGO_DB = process.env.MONGO_DB;
-
 const NUM_USERS = 500;
 const NUM_RESTAURANTS = 500;
 const NUM_ORDERS = 500;
@@ -23,28 +19,18 @@ const MENUS = ['Kids Menu', 'Lunch Menu', 'Dinner Menu', 'Happy Hour Menu', 'Sea
 
 
 const pgClient = new Client(POSTGRES);
-const mongoClient = new MongoClient(MONGO_URL);
 
 async function run() {
   await pgClient.connect();
-  const mongo = mongoClient.db(MONGO_DB);
 
   console.log("Limpiando bases de datos...");
   await pgClient.query(`TRUNCATE Order_Line, Reservation, "Order", "Table", Menu_Restaurant, Products, Menu, Restaurant, Users RESTART IDENTITY CASCADE`);
-  await Promise.all([
-    mongo.collection('users').deleteMany({}),
-    mongo.collection('menu').deleteMany({}),
-    mongo.collection('restaurant').deleteMany({}),
-    mongo.collection('order').deleteMany({}),
-    mongo.collection('reservation').deleteMany({})
-  ]);
 
   console.log("Insertando menús...");
   const menuIds = {};
   for (const name of MENUS) {
     const res = await pgClient.query(`INSERT INTO Menu ("Name") VALUES ($1) RETURNING Menu_ID`, [name]);
     menuIds[name] = res.rows[0].menu_id;
-    await mongo.collection('menu').insertOne({ name, products: [] });
   }
 
   console.log("Insertando usuarios...");
@@ -60,7 +46,6 @@ async function run() {
     );
     const userId = res.rows[0].user_id;
     userIds.push(userId);
-    await mongo.collection('users').insertOne({ userId, role, username, email, password });
   }
 
   console.log("Insertando restaurantes...");
@@ -85,14 +70,6 @@ async function run() {
       const res = await pgClient.query(`INSERT INTO "Table" (Restaurant_ID, Capacity) VALUES ($1, $2) RETURNING Table_ID`, [restaurantId, 4]);
       tables.push({ tableId: res.rows[0].table_id, capacity: 4 });
     }
-
-    await mongo.collection('restaurant').insertOne({
-      restaurantId,
-      name,
-      address,
-      menuIds: menuSubset,
-      tables
-    });
   }
 
   console.log("Insertando productos...");
@@ -108,10 +85,6 @@ async function run() {
         [name, description, menu_id, price]
       );
       productIds.push({ productId: res.rows[0].product_id, price });
-      await mongo.collection('menu').updateOne(
-        { name: Name },
-        { $push: { products: { productId: res.rows[0].product_id, name, description, price } } }
-      );
     }
   }
 
@@ -133,14 +106,6 @@ async function run() {
         [orderId, item.productId, item.price]
       );
     }
-
-    await mongo.collection('order').insertOne({
-      orderId,
-      restaurantId,
-      datetimne: datetime,
-      userId,
-      orderLines: items.map(p => ({ productId: p.productId, price: p.price }))
-    });
   }
 
   console.log(" Insertando reservas...");
@@ -157,19 +122,10 @@ async function run() {
       `INSERT INTO Reservation ("Datetime", User_ID, Capacity, Table_ID, Restaurant_ID) VALUES ($1, $2, $3, $4, $5) RETURNING Reservation_ID`,
       [datetime, userId, 4, tableId, restaurantId]
     );
-    await mongo.collection('reservation').insertOne({
-      reservationId: res.rows[0].reservation_id,
-      restaurantId,
-      tableId,
-      userId,
-      capacity: 4,
-      datetime
-    });
   }
 
   await pgClient.end();
-  await mongoClient.close();
-  console.log("✅ Carga completa en PostgreSQL y MongoDB.");
+  console.log("✅ Carga completa en PostgreSQL.");
 }
 
 run().catch(err => {

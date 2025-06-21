@@ -44,7 +44,9 @@ CREATE TABLE "Order" (
     Order_ID SERIAL PRIMARY KEY,   -- Auto-increment Order_ID
     "Datetime" TIMESTAMP NOT NULL,    -- Order Date and Time
     User_ID INT REFERENCES Users(User_ID) ON DELETE SET NULL,  -- Foreign Key to Users
-    Restaurant_ID INT REFERENCES Restaurant(Restaurant_ID) ON DELETE CASCADE  -- Foreign Key to Restaurant
+    Restaurant_ID INT REFERENCES Restaurant(Restaurant_ID) ON DELETE CASCADE,  -- Foreign Key to Restaurant
+    "Address" VARCHAR(255),
+    "Status" VARCHAR(255)
 );
 
 -- Create Order_Line Table (Relation between Orders and Menu_Products)
