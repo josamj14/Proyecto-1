@@ -88,25 +88,31 @@ async function run() {
     }
   }
 
-  console.log("Insertando órdenes...");
-  for (let i = 0; i < NUM_ORDERS; i++) {
-    const userId = faker.helpers.arrayElement(userIds);
-    const restaurantId = faker.helpers.arrayElement(restaurantIds);
-    const datetime = faker.date.recent({ days: 30 });
-    const res = await pgClient.query(
-      `INSERT INTO "Order" ("Datetime", User_ID, Restaurant_ID) VALUES ($1, $2, $3) RETURNING Order_ID`,
-      [datetime, userId, restaurantId]
-    );
-    const orderId = res.rows[0].order_id;
+console.log("Insertando órdenes...");
+for (let i = 0; i < NUM_ORDERS; i++) {
+  const userId = faker.helpers.arrayElement(userIds);
+  const restaurantId = faker.helpers.arrayElement(restaurantIds);
+  const datetime = faker.date.recent({ days: 30 });
 
-    const items = faker.helpers.arrayElements(productIds, 2);
-    for (const item of items) {
-      await pgClient.query(
-        `INSERT INTO Order_Line (Order_ID, Product_ID, Price) VALUES ($1, $2, $3)`,
-        [orderId, item.productId, item.price]
-      );
-    }
+  const address = faker.location.streetAddress(); // dirección aleatoria
+  const status = faker.helpers.arrayElement(["DELIVERED", "CANCELLED"]);
+
+  const res = await pgClient.query(
+    `INSERT INTO "Order" ("Datetime", User_ID, Restaurant_ID, "Address", "Status")
+     VALUES ($1, $2, $3, $4, $5) RETURNING Order_ID`,
+    [datetime, userId, restaurantId, address, status]
+  );
+  const orderId = res.rows[0].order_id;
+
+  const items = faker.helpers.arrayElements(productIds, 2);
+  for (const item of items) {
+    await pgClient.query(
+      `INSERT INTO Order_Line (Order_ID, Product_ID, Price) VALUES ($1, $2, $3)`,
+      [orderId, item.productId, item.price]
+    );
   }
+}
+
 
   console.log(" Insertando reservas...");
   for (let i = 0; i < NUM_RESERVATIONS; i++) {
