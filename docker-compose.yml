@@ -55,8 +55,6 @@ services:
       - "traefik.http.routers.backend.entrypoints=web"
       - "traefik.http.services.backend.loadbalancer.server.port=3000"
 
-#------------------------REDIS------------------------------------|
-#Levantando el servicio de redis en el compose.
   redis:
     container_name: redis
     build:
@@ -70,21 +68,6 @@ services:
     networks:
       - backend-network
 
-#-----------------ELASTIC--------------------------------------|
-#Levantando el servicio de elastic en el compose
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
-    environment:
-      - discovery.type=single-node
-      - network.host=0.0.0.0
-      - xpack.security.enabled=false
-    ports:
-      - "9200:9200"
-    volumes:
-      - elastic-data:/usr/share/elasticsearch/data
-    networks:
-      - backend-network
-#------------------------------------------------------------------------|
   charge-data:
     build: ./cargar_datos
     dns:
@@ -196,24 +179,9 @@ services:
 
   
 volumes:
-  data1:
-  data2:
-  data3:
-  data4:
-  data5:
-  data6:
-  data7:
-  data8:
-  data9:
-  config1:
-  config2:
-  config3:
-  elastic-data:
   namenode:
   datanode:
 
 networks:
-  mongo-replica-sharding:
-    driver: bridge
   backend-network:   # Nueva red agregada
     driver: bridge
