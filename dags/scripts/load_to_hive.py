@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from pyhive import hive
+import subprocess
 
 def sanitize_column_name(col):
     return col.strip().replace(" ", "_").replace("-", "_")
@@ -13,19 +14,23 @@ def infer_hive_type(dtype):
     else:
         return "STRING"
 
-def load_to_hive(directory="/opt/airflow/tmp/"):
+shared_dir = "/opt/airflow/dags/"
+
+def load_to_hive(directory="/opt/airflow/dags/"):
     conn = hive.Connection(host='hive-server', port=10000, username='hive')
     cursor = conn.cursor()
 
     for filename in os.listdir(directory):
         if filename.endswith(".csv"):
             table_name = os.path.splitext(filename)[0]
+            quoted_table_name = f'`{table_name}`'  # Always quote table name
             file_path = os.path.join(directory, filename)
+            hive_path = os.path.join(shared_dir, filename)
             print(f"Cargando tabla: {table_name} desde {file_path}")
 
-            df = pd.read_csv(file_path)
+            df = pd.read_csv(file_path, nrows=100)
 
-            # Construir definición de tabla
+            # Construir definición
             hive_schema = []
             for col in df.columns:
                 hive_col = sanitize_column_name(col)
@@ -34,7 +39,7 @@ def load_to_hive(directory="/opt/airflow/tmp/"):
             schema_str = ", ".join(hive_schema)
 
             cursor.execute(f"""
-                CREATE TABLE IF NOT EXISTS {table_name} (
+                CREATE TABLE IF NOT EXISTS {quoted_table_name} (
                     {schema_str}
                 )
                 ROW FORMAT DELIMITED
@@ -42,18 +47,8 @@ def load_to_hive(directory="/opt/airflow/tmp/"):
                 STORED AS TEXTFILE
             """)
 
-            # Insertar los datos
-            for _, row in df.iterrows():
-                values = []
-                for val in row:
-                    if pd.isna(val):
-                        values.append("NULL")
-                    elif isinstance(val, str):
-                        values.append(f"'{val.replace("'", "''")}'")
-                    else:
-                        values.append(str(val))
-                insert_query = f"INSERT INTO {table_name} VALUES ({', '.join(values)})"
-                cursor.execute(insert_query)
+            cursor.execute(f"LOAD DATA LOCAL INPATH '{hive_path}' OVERWRITE INTO TABLE {quoted_table_name}")
 
     cursor.close()
     conn.close()
+

@@ -38,6 +38,8 @@ services:
       timeout: 5s
     networks:
       - backend-network   # Agregado aquí AGREGUÉ UN NET PORQUE NO ME  LEVANTA EL POSTGRESS.
+      - etl-network
+      - airflow-network
 
   backend:
     build: 
@@ -49,6 +51,7 @@ services:
         condition: service_healthy
     networks:
       - backend-network   # Agregado aquí EL  NET ATTE PIKI ME CAGO EN TODO :3 
+      
     labels: #veamos si hace routing este mae 
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
@@ -98,6 +101,9 @@ services:
       - ./hive/hadoop-hive.env
     ports:
       - "50070:50070"
+    networks:
+      - etl-network
+  
   
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
@@ -109,6 +115,9 @@ services:
       SERVICE_PRECONDITION: "namenode:50070"
     ports:
       - "50075:50075"
+    networks:
+      - etl-network
+  
   
   hive-server:
     image: bde2020/hive:2.3.2-postgresql-metastore
@@ -117,8 +126,18 @@ services:
     environment:
       HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
       SERVICE_PRECONDITION: "hive-metastore:9083"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "10000"]
+      interval: 10s
+      retries: 15
+      start_period: 30s
+      timeout: 5s
     ports:
       - "10000:10000"
+    networks:
+      - etl-network
+    volumes:
+      - ./dags:/opt/airflow/dags
   
   hive-metastore:
     image: bde2020/hive:2.3.2-postgresql-metastore
@@ -129,10 +148,16 @@ services:
       SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
     ports:
       - "9083:9083"
+    networks:
+      - etl-network
+    volumes:
+      - ./dags:/opt/airflow/dags
 
   
   hive-metastore-postgresql:
     image: bde2020/hive-metastore-postgresql:2.3.0
+    networks:
+      - etl-network
   
   presto-coordinator:
     image: shawnzhu/prestodb:0.181
@@ -140,7 +165,10 @@ services:
       - "8081:8081"
       
   airflow-webserver:
-    image: apache/airflow:2.9.1
+    build:
+      context: ./dags
+      dockerfile: Dockerfile
+    image: josianamj/airflow:latest
     container_name: airflow-webserver
     command: webserver
     ports:
@@ -151,13 +179,19 @@ services:
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
     volumes:
       - ./dags:/opt/airflow/dags
-      - ./scripts:/opt/airflow/scripts
+      - ./dags/scripts:/opt/airflow/dags/scripts 
       - ./airflow_db:/opt/airflow
     depends_on:
-      - airflow-init
+      hive-server:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+    networks:
+      - airflow-network
+      - etl-network
 
   airflow-scheduler:
-    image: apache/airflow:2.9.1
+    image: josianamj/airflow:latest
     container_name: airflow-scheduler
     command: scheduler
     environment:
@@ -168,9 +202,12 @@ services:
       - ./airflow_db:/opt/airflow
     depends_on:
       - airflow-init
+    networks:
+      - airflow-network
+      - etl-network
 
   airflow-init:
-    image: apache/airflow:2.9.1
+    image: josianamj/airflow:latest
     container_name: airflow-init
     command: bash -c "airflow db init"
     volumes:
@@ -184,4 +221,8 @@ volumes:
 
 networks:
   backend-network:   # Nueva red agregada
+    driver: bridge
+  airflow-network:
+    driver: bridge
+  etl-network:
     driver: bridge
