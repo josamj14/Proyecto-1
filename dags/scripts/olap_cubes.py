@@ -38,27 +38,6 @@ def create_views():
         GROUP BY TO_DATE(datetime)
     """)
 
-    #TOP selling products by restaurant
-    cursor.execute(""" 
-        CREATE OR REPLACE VIEW top_selling_products AS
-        WITH ranked_products AS (
-            SELECT 
-                restaurant_id,
-                product_id,
-                name,
-                SUM(price) AS total_sales,
-                ROW_NUMBER() OVER (PARTITION BY restaurant_id ORDER BY SUM(price) DESC) AS rank
-            FROM product_sales
-            GROUP BY restaurant_id, product_id, name
-        )
-        SELECT 
-            restaurant_id,
-            name,
-            total_sales
-        FROM ranked_products
-        WHERE rank = 1
-    """)
-
     #monthLY SALES GROWTH
     cursor.execute(""" 
         CREATE OR REPLACE VIEW monthly_sales_growth AS

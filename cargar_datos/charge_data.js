@@ -92,7 +92,7 @@ console.log("Insertando órdenes...");
 for (let i = 0; i < NUM_ORDERS; i++) {
   const userId = faker.helpers.arrayElement(userIds);
   const restaurantId = faker.helpers.arrayElement(restaurantIds);
-  const datetime = faker.date.recent({ days: 30 });
+  const datetime = faker.date.recent({ days: 300 });
 
   const address = faker.location.streetAddress(); // dirección aleatoria
   const status = faker.helpers.arrayElement(["DELIVERED", "CANCELLED"]);
