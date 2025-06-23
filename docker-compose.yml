@@ -214,6 +214,19 @@ services:
       - ./dags:/opt/airflow/dags
       - ./airflow_db:/opt/airflow
 
+  spark:
+    image: bitnami/spark:latest
+    container_name: spark
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "7077:7077"      
+      - "8083:8080"     
+    volumes:
+      - ./spark:/opt/spark-apps
+      - ./dags:/opt/airflow/dags
+      - ./airflow_db:/opt/airflow
+
   
 volumes:
   namenode:

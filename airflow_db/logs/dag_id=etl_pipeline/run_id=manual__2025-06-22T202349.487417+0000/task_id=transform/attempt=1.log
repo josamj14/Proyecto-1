@@ -1,0 +1,47 @@
+[2025-06-22T20:24:22.054+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-22T20:24:22.083+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_pipeline.transform manual__2025-06-22T20:23:49.487417+00:00 [queued]>
+[2025-06-22T20:24:22.093+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_pipeline.transform manual__2025-06-22T20:23:49.487417+00:00 [queued]>
+[2025-06-22T20:24:22.095+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2025-06-22T20:24:22.124+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): transform> on 2025-06-22 20:23:49.487417+00:00
+[2025-06-22T20:24:22.131+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'etl_pipeline', 'transform', 'manual__2025-06-22T20:23:49.487417+00:00', '--job-id', '125', '--raw', '--subdir', 'DAGS_FOLDER/etl_dag.py', '--cfg-path', '/tmp/tmpj5efedup']
+[2025-06-22T20:24:22.133+0000] {standard_task_runner.py:91} INFO - Job 125: Subtask transform
+[2025-06-22T20:24:22.136+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:61 DeprecationWarning: This process (pid=511) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-22T20:24:22.137+0000] {standard_task_runner.py:63} INFO - Started process 520 to run task
+[2025-06-22T20:24:22.202+0000] {task_command.py:426} INFO - Running <TaskInstance: etl_pipeline.transform manual__2025-06-22T20:23:49.487417+00:00 [running]> on host 05d78a34d645
+[2025-06-22T20:24:22.293+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='etl_pipeline' AIRFLOW_CTX_TASK_ID='transform' AIRFLOW_CTX_EXECUTION_DATE='2025-06-22T20:23:49.487417+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-06-22T20:23:49.487417+00:00'
+[2025-06-22T20:24:22.294+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-22T20:24:28.287+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-22T20:24:28.290+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/scripts/transform_with_spark.py", line 20, in transform_with_spark
+    df = spark.read.csv("/opt/airflow/dags/users.csv", header=True, inferSchema=True)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/sql/readwriter.py", line 838, in csv
+    return self._df(self._jreader.csv(self._spark._sc._jvm.PythonUtils.toSeq(path)))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/java_gateway.py", line 1362, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/errors/exceptions/captured.py", line 288, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: [PATH_NOT_FOUND] Path does not exist: file:/opt/airflow/dags/users.csv. SQLSTATE: 42K03
+[2025-06-22T20:24:28.333+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=etl_pipeline, task_id=transform, run_id=manual__2025-06-22T20:23:49.487417+00:00, execution_date=20250622T202349, start_date=20250622T202422, end_date=20250622T202428
+[2025-06-22T20:24:28.362+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 125 for task transform ([PATH_NOT_FOUND] Path does not exist: file:/opt/airflow/dags/users.csv. SQLSTATE: 42K03; 520)
+[2025-06-22T20:24:28.397+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 1
+[2025-06-22T20:24:28.426+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-06-22T20:24:28.443+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

@@ -1,0 +1,51 @@
+[2025-06-22T18:07:14.037+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-22T18:07:14.077+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_pipeline.extract manual__2025-06-22T18:07:08.841822+00:00 [queued]>
+[2025-06-22T18:07:14.092+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_pipeline.extract manual__2025-06-22T18:07:08.841822+00:00 [queued]>
+[2025-06-22T18:07:14.093+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2025-06-22T18:07:14.125+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): extract> on 2025-06-22 18:07:08.841822+00:00
+[2025-06-22T18:07:14.143+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'etl_pipeline', 'extract', 'manual__2025-06-22T18:07:08.841822+00:00', '--job-id', '84', '--raw', '--subdir', 'DAGS_FOLDER/etl_dag.py', '--cfg-path', '/tmp/tmpdnx2jefv']
+[2025-06-22T18:07:14.149+0000] {standard_task_runner.py:91} INFO - Job 84: Subtask extract
+[2025-06-22T18:07:14.158+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:61 DeprecationWarning: This process (pid=54) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-22T18:07:14.158+0000] {standard_task_runner.py:63} INFO - Started process 63 to run task
+[2025-06-22T18:07:14.287+0000] {task_command.py:426} INFO - Running <TaskInstance: etl_pipeline.extract manual__2025-06-22T18:07:08.841822+00:00 [running]> on host bcf94d0adc3f
+[2025-06-22T18:07:14.621+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='etl_pipeline' AIRFLOW_CTX_TASK_ID='extract' AIRFLOW_CTX_EXECUTION_DATE='2025-06-22T18:07:08.841822+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-06-22T18:07:08.841822+00:00'
+[2025-06-22T18:07:14.623+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-22T18:07:14.708+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: order_line
+[2025-06-22T18:07:14.718+0000] {logging_mixin.py:188} WARNING - /opt/airflow/dags/scripts/extract_postgres.py:25 UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+[2025-06-22T18:07:14.752+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-22T18:07:14.753+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/scripts/extract_postgres.py", line 26, in extract_postgres
+    df.to_csv(f"/opt/airflow/dags/{table_name}.csv", index=False)
+  File "/home/airflow/.local/lib/python3.12/site-packages/pandas/core/generic.py", line 3902, in to_csv
+    return DataFrameRenderer(formatter).to_csv(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pandas/io/formats/format.py", line 1152, in to_csv
+    csv_formatter.save()
+  File "/home/airflow/.local/lib/python3.12/site-packages/pandas/io/formats/csvs.py", line 247, in save
+    with get_handle(
+         ^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pandas/io/common.py", line 863, in get_handle
+    handle = open(
+             ^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '/opt/airflow/dags/order_line.csv'
+[2025-06-22T18:07:14.786+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=etl_pipeline, task_id=extract, run_id=manual__2025-06-22T18:07:08.841822+00:00, execution_date=20250622T180708, start_date=20250622T180714, end_date=20250622T180714
+[2025-06-22T18:07:14.841+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 84 for task extract ([Errno 21] Is a directory: '/opt/airflow/dags/order_line.csv'; 63)
+[2025-06-22T18:07:14.855+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 1
+[2025-06-22T18:07:14.910+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-06-22T18:07:14.932+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

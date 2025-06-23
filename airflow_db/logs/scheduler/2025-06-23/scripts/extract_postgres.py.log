@@ -1,0 +1,190 @@
+[2025-06-23T00:13:06.044+0000] {processor.py:161} INFO - Started process (PID=508) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:13:06.045+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:13:06.047+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:13:06.047+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:13:06.329+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:13:06.348+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.310 seconds
+[2025-06-23T00:13:37.271+0000] {processor.py:161} INFO - Started process (PID=525) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:13:37.275+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:13:37.277+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:13:37.276+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:13:37.593+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:13:37.616+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.352 seconds
+[2025-06-23T00:14:08.267+0000] {processor.py:161} INFO - Started process (PID=532) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:14:08.269+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:14:08.271+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:14:08.271+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:14:08.708+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:14:08.730+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.470 seconds
+[2025-06-23T00:15:20.808+0000] {processor.py:161} INFO - Started process (PID=1015) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:15:20.809+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:15:20.811+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:15:20.811+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:15:21.101+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:15:21.127+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.324 seconds
+[2025-06-23T00:15:52.128+0000] {processor.py:161} INFO - Started process (PID=1022) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:15:52.132+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:15:52.135+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:15:52.134+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:15:52.609+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:15:52.645+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.524 seconds
+[2025-06-23T00:16:23.091+0000] {processor.py:161} INFO - Started process (PID=1029) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:16:23.092+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:16:23.094+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:16:23.093+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:16:23.348+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:16:23.366+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.280 seconds
+[2025-06-23T00:16:53.977+0000] {processor.py:161} INFO - Started process (PID=1036) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:16:53.979+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:16:53.980+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:16:53.980+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:16:54.401+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:16:54.420+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.449 seconds
+[2025-06-23T00:17:24.528+0000] {processor.py:161} INFO - Started process (PID=1043) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:17:24.529+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:17:24.531+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:17:24.531+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:17:24.807+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:17:24.874+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.351 seconds
+[2025-06-23T00:18:54.413+0000] {processor.py:161} INFO - Started process (PID=30) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:18:54.414+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:18:54.417+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:18:54.416+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:18:54.843+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:18:54.888+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.483 seconds
+[2025-06-23T00:19:25.487+0000] {processor.py:161} INFO - Started process (PID=37) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:19:25.489+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:19:25.494+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:19:25.493+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:19:25.897+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:19:25.918+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.438 seconds
+[2025-06-23T00:19:56.622+0000] {processor.py:161} INFO - Started process (PID=44) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:19:56.628+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:19:56.630+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:19:56.630+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:19:56.946+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:19:56.964+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.347 seconds
+[2025-06-23T00:20:52.942+0000] {processor.py:161} INFO - Started process (PID=526) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:20:52.943+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:20:52.945+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:20:52.945+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:20:53.229+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:20:53.255+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.319 seconds
+[2025-06-23T00:21:23.759+0000] {processor.py:161} INFO - Started process (PID=533) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:21:23.761+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:21:23.762+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:21:23.762+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:21:24.010+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:21:24.033+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.279 seconds
+[2025-06-23T00:21:54.637+0000] {processor.py:161} INFO - Started process (PID=540) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:21:54.638+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:21:54.640+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:21:54.640+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:21:54.958+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:21:54.979+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.350 seconds
+[2025-06-23T00:22:25.545+0000] {processor.py:161} INFO - Started process (PID=547) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:22:25.546+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:22:25.548+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:22:25.547+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:22:25.898+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:22:25.913+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.375 seconds
+[2025-06-23T00:22:56.837+0000] {processor.py:161} INFO - Started process (PID=554) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:22:56.838+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:22:56.839+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:22:56.839+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:22:57.106+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:22:57.129+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.297 seconds
+[2025-06-23T00:23:28.156+0000] {processor.py:161} INFO - Started process (PID=561) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:23:28.157+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:23:28.159+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:23:28.158+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:23:28.458+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:23:28.476+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.326 seconds
+[2025-06-23T00:23:59.246+0000] {processor.py:161} INFO - Started process (PID=568) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:23:59.248+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:23:59.249+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:23:59.249+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:23:59.591+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:23:59.614+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.373 seconds
+[2025-06-23T00:25:44.441+0000] {processor.py:161} INFO - Started process (PID=30) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:25:44.445+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:25:44.448+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:25:44.448+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:25:45.112+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:25:45.135+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.700 seconds
+[2025-06-23T00:26:16.334+0000] {processor.py:161} INFO - Started process (PID=37) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:26:16.335+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:26:16.337+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:26:16.337+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:26:16.695+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:26:16.713+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.385 seconds
+[2025-06-23T00:26:50.692+0000] {processor.py:161} INFO - Started process (PID=54) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:26:50.694+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:26:50.696+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:26:50.695+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:26:51.018+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:26:51.038+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.352 seconds
+[2025-06-23T00:27:37.910+0000] {processor.py:161} INFO - Started process (PID=521) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:27:37.911+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:27:37.913+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:27:37.912+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:27:38.193+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:27:38.213+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.308 seconds
+[2025-06-23T00:28:08.691+0000] {processor.py:161} INFO - Started process (PID=528) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:28:08.692+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:28:08.695+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:28:08.694+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:28:08.976+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:28:08.997+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.313 seconds
+[2025-06-23T00:28:39.527+0000] {processor.py:161} INFO - Started process (PID=535) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:28:39.528+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:28:39.534+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:28:39.533+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:28:39.979+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:28:40.007+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.487 seconds
+[2025-06-23T00:29:10.635+0000] {processor.py:161} INFO - Started process (PID=542) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:29:10.637+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:29:10.638+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:29:10.638+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:29:10.963+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:29:10.979+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.350 seconds
+[2025-06-23T00:29:41.574+0000] {processor.py:161} INFO - Started process (PID=549) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:29:41.576+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:29:41.578+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:29:41.578+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:29:41.816+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:29:41.838+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.269 seconds
+[2025-06-23T00:32:20.683+0000] {processor.py:161} INFO - Started process (PID=30) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:32:20.684+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:32:20.687+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:32:20.686+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:32:21.073+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:32:21.093+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.418 seconds
+[2025-06-23T00:32:51.759+0000] {processor.py:161} INFO - Started process (PID=37) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:32:51.761+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:32:51.764+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:32:51.763+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:32:52.090+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:32:52.111+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.360 seconds
+[2025-06-23T00:33:23.307+0000] {processor.py:161} INFO - Started process (PID=44) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:33:23.311+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:33:23.313+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:33:23.312+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:33:23.616+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:33:23.642+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.341 seconds
+[2025-06-23T00:34:21.585+0000] {processor.py:161} INFO - Started process (PID=532) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:34:21.589+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:34:21.592+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:34:21.591+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:34:21.934+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:34:21.966+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.388 seconds
+[2025-06-23T00:34:52.442+0000] {processor.py:161} INFO - Started process (PID=539) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:34:52.444+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:34:52.446+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:34:52.445+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:34:52.832+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:34:52.855+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.421 seconds
+[2025-06-23T00:35:23.211+0000] {processor.py:161} INFO - Started process (PID=546) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:35:23.212+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:35:23.214+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:35:23.213+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:35:23.508+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:35:23.535+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.329 seconds
+[2025-06-23T00:35:55.320+0000] {processor.py:161} INFO - Started process (PID=553) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:35:55.321+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:35:55.323+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:35:55.323+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:35:55.634+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:35:55.659+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.344 seconds
+[2025-06-23T00:36:26.306+0000] {processor.py:161} INFO - Started process (PID=560) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:36:26.307+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:36:26.309+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:36:26.309+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:36:26.609+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:36:26.632+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.331 seconds
+[2025-06-23T00:36:57.122+0000] {processor.py:161} INFO - Started process (PID=567) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:36:57.123+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:36:57.126+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:36:57.125+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:36:57.480+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:36:57.498+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.384 seconds
+[2025-06-23T00:37:28.165+0000] {processor.py:161} INFO - Started process (PID=574) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:37:28.166+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:37:28.168+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:37:28.168+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:37:28.455+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:37:28.477+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.319 seconds
+[2025-06-23T00:37:59.175+0000] {processor.py:161} INFO - Started process (PID=581) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:37:59.176+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:37:59.177+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:37:59.177+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:37:59.477+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:37:59.499+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.330 seconds
+[2025-06-23T00:38:30.205+0000] {processor.py:161} INFO - Started process (PID=588) to work on /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:38:30.206+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/scripts/extract_postgres.py for tasks to queue
+[2025-06-23T00:38:30.209+0000] {logging_mixin.py:188} INFO - [2025-06-23T00:38:30.208+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:38:30.551+0000] {processor.py:842} WARNING - No viable dags retrieved from /opt/airflow/dags/scripts/extract_postgres.py
+[2025-06-23T00:38:30.575+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/scripts/extract_postgres.py took 0.376 seconds

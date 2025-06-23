@@ -1,0 +1,45 @@
+[2025-06-22T19:59:06.142+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-22T19:59:06.168+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_pipeline.transform manual__2025-06-22T19:58:56.985488+00:00 [queued]>
+[2025-06-22T19:59:06.177+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_pipeline.transform manual__2025-06-22T19:58:56.985488+00:00 [queued]>
+[2025-06-22T19:59:06.179+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2025-06-22T19:59:06.208+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): transform> on 2025-06-22 19:58:56.985488+00:00
+[2025-06-22T19:59:06.216+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'etl_pipeline', 'transform', 'manual__2025-06-22T19:58:56.985488+00:00', '--job-id', '111', '--raw', '--subdir', 'DAGS_FOLDER/etl_dag.py', '--cfg-path', '/tmp/tmpcdnswc2q']
+[2025-06-22T19:59:06.219+0000] {standard_task_runner.py:91} INFO - Job 111: Subtask transform
+[2025-06-22T19:59:06.224+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:61 DeprecationWarning: This process (pid=70) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-22T19:59:06.225+0000] {standard_task_runner.py:63} INFO - Started process 79 to run task
+[2025-06-22T19:59:06.301+0000] {task_command.py:426} INFO - Running <TaskInstance: etl_pipeline.transform manual__2025-06-22T19:58:56.985488+00:00 [running]> on host 53927598652a
+[2025-06-22T19:59:06.423+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='etl_pipeline' AIRFLOW_CTX_TASK_ID='transform' AIRFLOW_CTX_EXECUTION_DATE='2025-06-22T19:58:56.985488+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-06-22T19:58:56.985488+00:00'
+[2025-06-22T19:59:06.424+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-22T19:59:16.445+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-22T19:59:16.446+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/scripts/transform_with_spark.py", line 24, in transform_with_spark
+    shutil.rmtree("/opt/airflow/dags/users.csv")
+  File "/usr/local/lib/python3.12/shutil.py", line 785, in rmtree
+    _rmtree_safe_fd(fd, path, onexc)
+  File "/usr/local/lib/python3.12/shutil.py", line 661, in _rmtree_safe_fd
+    onexc(os.scandir, path, err)
+  File "/usr/local/lib/python3.12/shutil.py", line 657, in _rmtree_safe_fd
+    with os.scandir(topfd) as scandir_it:
+         ^^^^^^^^^^^^^^^^^
+NotADirectoryError: [Errno 20] Not a directory: '/opt/airflow/dags/users.csv'
+[2025-06-22T19:59:16.462+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=etl_pipeline, task_id=transform, run_id=manual__2025-06-22T19:58:56.985488+00:00, execution_date=20250622T195856, start_date=20250622T195906, end_date=20250622T195916
+[2025-06-22T19:59:16.490+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 111 for task transform ([Errno 20] Not a directory: '/opt/airflow/dags/users.csv'; 79)
+[2025-06-22T19:59:16.509+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 1
+[2025-06-22T19:59:16.544+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-06-22T19:59:16.572+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

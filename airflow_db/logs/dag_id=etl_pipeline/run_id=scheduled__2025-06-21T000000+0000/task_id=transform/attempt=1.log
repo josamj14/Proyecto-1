@@ -1,0 +1,36 @@
+[2025-06-22T18:38:28.198+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-22T18:38:28.225+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_pipeline.transform scheduled__2025-06-21T00:00:00+00:00 [queued]>
+[2025-06-22T18:38:28.234+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_pipeline.transform scheduled__2025-06-21T00:00:00+00:00 [queued]>
+[2025-06-22T18:38:28.235+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2025-06-22T18:38:28.273+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): transform> on 2025-06-21 00:00:00+00:00
+[2025-06-22T18:38:28.281+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'etl_pipeline', 'transform', 'scheduled__2025-06-21T00:00:00+00:00', '--job-id', '91', '--raw', '--subdir', 'DAGS_FOLDER/etl_dag.py', '--cfg-path', '/tmp/tmpn4hp33ir']
+[2025-06-22T18:38:28.285+0000] {standard_task_runner.py:91} INFO - Job 91: Subtask transform
+[2025-06-22T18:38:28.286+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:61 DeprecationWarning: This process (pid=62) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-22T18:38:28.287+0000] {standard_task_runner.py:63} INFO - Started process 71 to run task
+[2025-06-22T18:38:28.393+0000] {task_command.py:426} INFO - Running <TaskInstance: etl_pipeline.transform scheduled__2025-06-21T00:00:00+00:00 [running]> on host 8983ef640d38
+[2025-06-22T18:38:28.526+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='etl_pipeline' AIRFLOW_CTX_TASK_ID='transform' AIRFLOW_CTX_EXECUTION_DATE='2025-06-21T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-06-21T00:00:00+00:00'
+[2025-06-22T18:38:28.527+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-22T18:38:38.377+0000] {python.py:237} INFO - Done. Returned value was: None
+[2025-06-22T18:38:38.379+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-22T18:38:38.410+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=etl_pipeline, task_id=transform, run_id=scheduled__2025-06-21T00:00:00+00:00, execution_date=20250621T000000, start_date=20250622T183828, end_date=20250622T183838
+[2025-06-22T18:38:38.488+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2025-06-22T18:38:38.517+0000] {taskinstance.py:3498} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-06-22T18:38:38.526+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
+[2025-06-22T20:24:04.431+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-22T20:24:04.460+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_pipeline.transform scheduled__2025-06-21T00:00:00+00:00 [queued]>
+[2025-06-22T20:24:04.469+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_pipeline.transform scheduled__2025-06-21T00:00:00+00:00 [queued]>
+[2025-06-22T20:24:04.469+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2025-06-22T20:24:04.495+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): transform> on 2025-06-21 00:00:00+00:00
+[2025-06-22T20:24:04.502+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'etl_pipeline', 'transform', 'scheduled__2025-06-21T00:00:00+00:00', '--job-id', '124', '--raw', '--subdir', 'DAGS_FOLDER/etl_dag.py', '--cfg-path', '/tmp/tmppaisa7c5']
+[2025-06-22T20:24:04.506+0000] {standard_task_runner.py:91} INFO - Job 124: Subtask transform
+[2025-06-22T20:24:04.507+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:61 DeprecationWarning: This process (pid=67) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-22T20:24:04.508+0000] {standard_task_runner.py:63} INFO - Started process 76 to run task
+[2025-06-22T20:24:04.577+0000] {task_command.py:426} INFO - Running <TaskInstance: etl_pipeline.transform scheduled__2025-06-21T00:00:00+00:00 [running]> on host 05d78a34d645
+[2025-06-22T20:24:04.693+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='etl_pipeline' AIRFLOW_CTX_TASK_ID='transform' AIRFLOW_CTX_EXECUTION_DATE='2025-06-21T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-06-21T00:00:00+00:00'
+[2025-06-22T20:24:04.694+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-22T20:24:18.542+0000] {python.py:237} INFO - Done. Returned value was: None
+[2025-06-22T20:24:18.544+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-22T20:24:18.559+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=etl_pipeline, task_id=transform, run_id=scheduled__2025-06-21T00:00:00+00:00, execution_date=20250621T000000, start_date=20250622T202404, end_date=20250622T202418
+[2025-06-22T20:24:18.632+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2025-06-22T20:24:18.664+0000] {taskinstance.py:3498} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-06-22T20:24:18.676+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

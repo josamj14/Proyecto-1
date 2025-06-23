@@ -1,0 +1,119 @@
+[2025-06-22T19:17:58.719+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-22T19:17:58.758+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_pipeline.load manual__2025-06-22T19:17:36.232401+00:00 [queued]>
+[2025-06-22T19:17:58.770+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_pipeline.load manual__2025-06-22T19:17:36.232401+00:00 [queued]>
+[2025-06-22T19:17:58.773+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2025-06-22T19:17:58.799+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): load> on 2025-06-22 19:17:36.232401+00:00
+[2025-06-22T19:17:58.808+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'etl_pipeline', 'load', 'manual__2025-06-22T19:17:36.232401+00:00', '--job-id', '108', '--raw', '--subdir', 'DAGS_FOLDER/etl_dag.py', '--cfg-path', '/tmp/tmpp3w36495']
+[2025-06-22T19:17:58.811+0000] {standard_task_runner.py:91} INFO - Job 108: Subtask load
+[2025-06-22T19:17:58.817+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:61 DeprecationWarning: This process (pid=310) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-22T19:17:58.817+0000] {standard_task_runner.py:63} INFO - Started process 319 to run task
+[2025-06-22T19:17:58.889+0000] {task_command.py:426} INFO - Running <TaskInstance: etl_pipeline.load manual__2025-06-22T19:17:36.232401+00:00 [running]> on host aae9f1863026
+[2025-06-22T19:17:59.002+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='etl_pipeline' AIRFLOW_CTX_TASK_ID='load' AIRFLOW_CTX_EXECUTION_DATE='2025-06-22T19:17:36.232401+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-06-22T19:17:36.232401+00:00'
+[2025-06-22T19:17:59.003+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-22T19:17:59.143+0000] {hive.py:475} INFO - USE `default`
+[2025-06-22T19:17:59.912+0000] {logging_mixin.py:188} INFO - Cargando tabla: dim_customers desde /opt/airflow/dags/dim_customers.csv
+[2025-06-22T19:17:59.929+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `dim_customers` (
+                    user_id INT, Role STRING, email STRING
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:00.440+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/dim_customers.csv' OVERWRITE INTO TABLE `dim_customers`
+[2025-06-22T19:18:01.730+0000] {logging_mixin.py:188} INFO - Cargando tabla: menu desde /opt/airflow/dags/menu.csv
+[2025-06-22T19:18:01.738+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `menu` (
+                    menu_id INT, Name STRING
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:01.849+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/menu.csv' OVERWRITE INTO TABLE `menu`
+[2025-06-22T19:18:02.267+0000] {logging_mixin.py:188} INFO - Cargando tabla: menu_restaurant desde /opt/airflow/dags/menu_restaurant.csv
+[2025-06-22T19:18:02.275+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `menu_restaurant` (
+                    restaurant_id INT, menu_id INT
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:02.393+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/menu_restaurant.csv' OVERWRITE INTO TABLE `menu_restaurant`
+[2025-06-22T19:18:02.792+0000] {logging_mixin.py:188} INFO - Cargando tabla: Order desde /opt/airflow/dags/Order.csv
+[2025-06-22T19:18:02.802+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `Order` (
+                    order_id INT, Datetime STRING, user_id INT, restaurant_id INT, Address STRING, Status STRING
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:02.906+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/Order.csv' OVERWRITE INTO TABLE `Order`
+[2025-06-22T19:18:03.360+0000] {logging_mixin.py:188} INFO - Cargando tabla: order_line desde /opt/airflow/dags/order_line.csv
+[2025-06-22T19:18:03.367+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `order_line` (
+                    order_id INT, product_id INT, unit_price FLOAT
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:03.454+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/order_line.csv' OVERWRITE INTO TABLE `order_line`
+[2025-06-22T19:18:04.179+0000] {logging_mixin.py:188} INFO - Cargando tabla: products desde /opt/airflow/dags/products.csv
+[2025-06-22T19:18:04.184+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `products` (
+                    product_id INT, Name STRING, Description STRING, menu_id INT, price FLOAT
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:04.282+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/products.csv' OVERWRITE INTO TABLE `products`
+[2025-06-22T19:18:04.597+0000] {logging_mixin.py:188} INFO - Cargando tabla: reservation desde /opt/airflow/dags/reservation.csv
+[2025-06-22T19:18:04.608+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `reservation` (
+                    reservation_id INT, Datetime STRING, user_id INT, capacity INT, table_id INT, restaurant_id INT
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:04.701+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/reservation.csv' OVERWRITE INTO TABLE `reservation`
+[2025-06-22T19:18:05.457+0000] {logging_mixin.py:188} INFO - Cargando tabla: restaurant desde /opt/airflow/dags/restaurant.csv
+[2025-06-22T19:18:05.462+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `restaurant` (
+                    restaurant_id INT, Name STRING, Address STRING
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:05.555+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/restaurant.csv' OVERWRITE INTO TABLE `restaurant`
+[2025-06-22T19:18:05.905+0000] {logging_mixin.py:188} INFO - Cargando tabla: Table desde /opt/airflow/dags/Table.csv
+[2025-06-22T19:18:05.911+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `Table` (
+                    table_id INT, restaurant_id INT, capacity INT, available STRING
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:06.005+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/Table.csv' OVERWRITE INTO TABLE `Table`
+[2025-06-22T19:18:06.352+0000] {logging_mixin.py:188} INFO - Cargando tabla: users desde /opt/airflow/dags/users.csv
+[2025-06-22T19:18:06.358+0000] {hive.py:475} INFO - 
+                CREATE TABLE IF NOT EXISTS `users` (
+                    user_id INT, Role STRING, username STRING, email STRING, Password STRING
+                )
+                ROW FORMAT DELIMITED
+                FIELDS TERMINATED BY ','
+                STORED AS TEXTFILE
+            
+[2025-06-22T19:18:06.441+0000] {hive.py:475} INFO - LOAD DATA LOCAL INPATH '/opt/airflow/dags/users.csv' OVERWRITE INTO TABLE `users`
+[2025-06-22T19:18:06.816+0000] {python.py:237} INFO - Done. Returned value was: None
+[2025-06-22T19:18:06.817+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-22T19:18:06.830+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=etl_pipeline, task_id=load, run_id=manual__2025-06-22T19:17:36.232401+00:00, execution_date=20250622T191736, start_date=20250622T191758, end_date=20250622T191806
+[2025-06-22T19:18:06.893+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2025-06-22T19:18:06.913+0000] {taskinstance.py:3498} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-06-22T19:18:06.915+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

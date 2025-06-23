@@ -1,0 +1,28 @@
+[2025-06-22T18:08:03.219+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-22T18:08:03.251+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: etl_pipeline.extract manual__2025-06-22T18:07:58.310060+00:00 [queued]>
+[2025-06-22T18:08:03.266+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: etl_pipeline.extract manual__2025-06-22T18:07:58.310060+00:00 [queued]>
+[2025-06-22T18:08:03.269+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2025-06-22T18:08:03.312+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): extract> on 2025-06-22 18:07:58.310060+00:00
+[2025-06-22T18:08:03.328+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'etl_pipeline', 'extract', 'manual__2025-06-22T18:07:58.310060+00:00', '--job-id', '85', '--raw', '--subdir', 'DAGS_FOLDER/etl_dag.py', '--cfg-path', '/tmp/tmp3mxw19i0']
+[2025-06-22T18:08:03.338+0000] {standard_task_runner.py:91} INFO - Job 85: Subtask extract
+[2025-06-22T18:08:03.352+0000] {logging_mixin.py:188} WARNING - /home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py:61 DeprecationWarning: This process (pid=77) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-22T18:08:03.357+0000] {standard_task_runner.py:63} INFO - Started process 86 to run task
+[2025-06-22T18:08:03.458+0000] {task_command.py:426} INFO - Running <TaskInstance: etl_pipeline.extract manual__2025-06-22T18:07:58.310060+00:00 [running]> on host bcf94d0adc3f
+[2025-06-22T18:08:03.597+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='etl_pipeline' AIRFLOW_CTX_TASK_ID='extract' AIRFLOW_CTX_EXECUTION_DATE='2025-06-22T18:07:58.310060+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-06-22T18:07:58.310060+00:00'
+[2025-06-22T18:08:03.599+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-22T18:08:03.636+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: order_line
+[2025-06-22T18:08:03.644+0000] {logging_mixin.py:188} WARNING - /opt/airflow/dags/scripts/extract_postgres.py:25 UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+[2025-06-22T18:08:03.669+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: reservation
+[2025-06-22T18:08:03.690+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: Order
+[2025-06-22T18:08:03.701+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: Table
+[2025-06-22T18:08:03.714+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: menu_restaurant
+[2025-06-22T18:08:03.724+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: products
+[2025-06-22T18:08:03.737+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: menu
+[2025-06-22T18:08:03.745+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: restaurant
+[2025-06-22T18:08:03.754+0000] {logging_mixin.py:188} INFO - Extrayendo tabla: users
+[2025-06-22T18:08:03.769+0000] {python.py:237} INFO - Done. Returned value was: None
+[2025-06-22T18:08:03.771+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-22T18:08:03.790+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=etl_pipeline, task_id=extract, run_id=manual__2025-06-22T18:07:58.310060+00:00, execution_date=20250622T180758, start_date=20250622T180803, end_date=20250622T180803
+[2025-06-22T18:08:03.856+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2025-06-22T18:08:03.887+0000] {taskinstance.py:3498} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-06-22T18:08:03.899+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
