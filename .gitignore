@@ -1,0 +1,10 @@
+# Airflow logs y BD
+airflow_db/airflow.db
+airflow_db/logs/
+
+# Python cache
+**/__pycache__/
+**/*.pyc
+
+# VSCode settings (opcional)
+.vscode/
