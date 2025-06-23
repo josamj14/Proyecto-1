@@ -13,4 +13,4 @@ ENV PATH=$JAVA_HOME/bin:$PATH
 
 USER airflow
 RUN pip install --upgrade pip
-RUN pip install pyhive thrift thrift_sasl pyspark 
+RUN pip install pyhive thrift thrift_sasl pyspark neo4j pandas
