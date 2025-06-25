@@ -8,3 +8,5 @@ airflow_db/logs/
 
 # VSCode settings (opcional)
 .vscode/
+
+*.csv
